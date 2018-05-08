@@ -1,6 +1,6 @@
 # task-panel
 
-An extension that provides list of tasks found in your workspaces and allow them to be executed.
+An extension that provides list of gulp and grunt tasks found in your workspaces and allow them to be executed.
 
 ## Features
 
@@ -9,13 +9,14 @@ An extension that provides list of tasks found in your workspaces and allow them
 
 ## Known Issues
 
-IS NOT PRODUCTION READY.
+- IS NOT PRODUCTION READY!!!.
+- WINDOWS -> NOT TESTED!!!.
 
 ## Release Notes
 
 Tasks Panel support gulp and grunt tasks.
 
-### 0.1.0
+### 0.1.2
 
 - Show tasks in explorer view.
 - Run tasks and show output in the Output View.

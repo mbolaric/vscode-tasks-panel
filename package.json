@@ -2,9 +2,26 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "List of tasks",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "publisher": "BitLaboratory",
+    "author": {
+        "name": "Milan Bolarić"
+    },
     "license": "MIT",
+    "preview": true,
+    "galleryBanner": {
+        "color": "#2F2F2F",
+        "theme": "dark"
+    },
+    "icon": "resources/icons/tasks-panel.png",
+    "homepage": "https://github.com/mbolaric/vscode-tasks-panel",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mbolaric/vscode-tasks-panel.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mbolaric/vscode-tasks-panel/issues"
+    },
     "engines": {
         "vscode": "^1.22.0"
     },
@@ -34,8 +51,8 @@
                 "command": "bitlab-vscode.taskpanel.refresh",
                 "title": "Refresh",
                 "icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
+					"light": "resources/icons/light/refresh.svg",
+					"dark": "resources/icons/dark/refresh.svg"
                 },
                 "category": "TaskPanel"
             },
@@ -43,8 +60,8 @@
 				"command": "bitlab-vscode.taskpanel.execute",
 				"title": "Execute Task",
 				"icon": {
-					"light": "resources/light/execute.svg",
-					"dark": "resources/dark/execute.svg"
+					"light": "resources/icons/light/execute.svg",
+					"dark": "resources/icons/dark/execute.svg"
                 },
                 "category": "TaskPanel"
             },
@@ -52,8 +69,8 @@
 				"command": "bitlab-vscode.taskpanel.terminate",
 				"title": "Terminate Task",
 				"icon": {
-					"light": "resources/light/terminate.svg",
-					"dark": "resources/dark/terminate.svg"
+					"light": "resources/icons/light/terminate.svg",
+					"dark": "resources/icons/dark/terminate.svg"
                 },
                 "category": "TaskPanel"
 			}
