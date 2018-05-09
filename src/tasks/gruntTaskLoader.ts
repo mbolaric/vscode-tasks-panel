@@ -73,7 +73,7 @@ export class GruntTaskLoader extends TaskLoader {
         let empty: TaskLoaderResult = TaskLoaderResult.empty();
         if (this.getRootPath) {
             let command = await this.getCommand(this.getRootPath);
-            let supportGruntFilePath =  path.join(__filename, '..', '..', 'resources', 'grunt');
+            let supportGruntFilePath =  path.join(__filename, '..', '..', '..', 'resources', 'grunt');
             let commandLoadLine = `${command} --tasks ${supportGruntFilePath} _fetchGruntTasks_`;
             try {
                 this.outputInfo(`Start loading tasks ...`);

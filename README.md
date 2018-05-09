@@ -20,3 +20,8 @@ Tasks Panel support gulp and grunt tasks.
 
 - Show tasks in explorer view.
 - Run tasks and show output in the Output View.
+
+### 0.1.3
+
+- Fix: grunt tasks are not loaded.
+

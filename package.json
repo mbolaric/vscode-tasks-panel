@@ -2,7 +2,7 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "List of tasks",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
