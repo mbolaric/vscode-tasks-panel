@@ -58,7 +58,7 @@ class TaskDetector implements ITaskLoader {
 }
 
 export class TaskManager {
-    private detectors: Map<string, ITaskLoader> = new Map();
+    private _detectors: Map<string, ITaskLoader> = new Map();
     private _loaders: Map<string, Function> = new Map();
     private _taskRunner: TaskRunner;
     private _taskPanelProvider: TaskPanelProvider;
@@ -106,8 +106,8 @@ export class TaskManager {
 
     private update(reload: boolean = false): void {
         output(`[Info] Discovering task file ...`);
-		if (this.detectors.size > 0) {
-			resolveTasks(this.detectors, reload).then((value: TaskLoaderResult[]) => {
+		if (this._detectors.size > 0) {
+			resolveTasks(this._detectors, reload).then((value: TaskLoaderResult[]) => {
                 this._taskPanelProvider.refresh(value);
             })
             .catch((reason: any) => {
@@ -115,7 +115,7 @@ export class TaskManager {
                 console.log(reason);
             });
 		}
-		else if (this.detectors.size === 0) {
+		else if (this._detectors.size === 0) {
             output(`[Info] Task file is not found.`);
             this._taskPanelProvider.refresh([]);
 		}
@@ -123,15 +123,15 @@ export class TaskManager {
 
     private updateWorkspaceFolders(added: vscode.WorkspaceFolder[], removed: vscode.WorkspaceFolder[]): void {
 		for (let remove of removed) {
-			let detector = this.detectors.get(remove.uri.toString());
+			let detector = this._detectors.get(remove.uri.toString());
 			if (detector) {
 				detector.dispose();
-				this.detectors.delete(remove.uri.toString());
+				this._detectors.delete(remove.uri.toString());
 			}
 		}
 		for (let add of added) {
 			let detector = new TaskDetector(this.createTaskLoaders(add));
-            this.detectors.set(add.uri.toString(), detector);
+            this._detectors.set(add.uri.toString(), detector);
             detector.start();
 		}
 		this.update();
@@ -215,7 +215,9 @@ export class TaskManager {
     }
 
     public dispose(): void {
-        this.detectors.clear();
         this.cleanSelection();
+        this._taskRunner.reset();
+        this._taskPanelProvider.clean();
+        this._detectors.clear();
     }
 }

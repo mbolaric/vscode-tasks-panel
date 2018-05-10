@@ -39,7 +39,7 @@ export class GulpTaskLoader extends TaskLoader {
             type: source,
             task: line
         };
-        let options: vscode.ShellExecutionOptions = { cwd: this.getRootPath, executable: `${command}`, shellArgs: [`${line}`] };
+        let options: vscode.ShellExecutionOptions = { cwd: this.getRootPath, executable: `${command}`, shellArgs: ['--no-color', `${line}`] };
         let task = new vscode.Task(kind, this.getWorkspaceFolder, line, source, new vscode.ShellExecution(`${command} ${line}`, options));
         taskArray.push(task);
         this.setTaskGroup(line, task);

@@ -2,7 +2,7 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "List of tasks",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
@@ -14,10 +14,10 @@
         "theme": "dark"
     },
     "icon": "resources/icons/tasks-panel.png",
-    "homepage": "https://github.com/mbolaric/vscode-tasks-panel",
+    "homepage": "https://github.com/mbolaric/vscode-tasks-panel/blob/master/README.md",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mbolaric/vscode-tasks-panel.git"
+        "url": "https://github.com/mbolaric/vscode-tasks-panel.git"
     },
     "bugs": {
         "url": "https://github.com/mbolaric/vscode-tasks-panel/issues"

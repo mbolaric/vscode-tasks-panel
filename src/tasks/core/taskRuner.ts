@@ -95,6 +95,9 @@ export class TaskRunner {
                     };                 
                     if (options.executable) {
                         if (this.isWindows) {
+                            let options: any = defaults;
+                            options.windowsVerbatimArguments = true;
+                            options.detached = false;
                             let args: string[] = [
                             	'/s',
                             	'/c',

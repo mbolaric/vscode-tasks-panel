@@ -25,3 +25,7 @@ Tasks Panel support gulp and grunt tasks.
 
 - Fix: grunt tasks are not loaded.
 
+### 0.1.4
+
+- Fix: terminate long running task when vscode is closed.
+
