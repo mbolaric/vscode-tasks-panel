@@ -11,3 +11,7 @@ All notable changes to the "task-panel" extension will be documented in this fil
 ### [0.1.4] - 2018-10-05
 
 - Fix: terminate long running task when vscode is closed.
+
+### [0.1.5] - 2018-10-05
+
+- Fix: Grunt tasks without multiple targets are now shown in the list.

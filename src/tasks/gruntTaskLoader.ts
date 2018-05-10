@@ -52,21 +52,29 @@ export class GruntTaskLoader extends TaskLoader {
         this.setTaskGroup(name, task);
     }
 
+    private pushTask(taskArray: vscode.Task[], source: string, fullName: string, command: string | undefined, subTaskName: string) {
+        let kind: IExtendedTaskDefinition = {
+            type: source,
+            task: fullName
+        };
+        let options: vscode.ShellExecutionOptions = { cwd: this.getRootPath, executable: `${command}`, shellArgs: [`${subTaskName}`, '--no-color'] };
+        let task = new vscode.Task(kind, this.getWorkspaceFolder, fullName, source, new vscode.ShellExecution(`${command} ${subTaskName}`, options));
+        taskArray.push(task);
+        this.setTaskGroup(fullName, task);
+    }
+
     private extractCoreTask(taskArray: vscode.Task[], command: string | undefined, taskObj: {name: string, info: string, multi: boolean, targets: string[]}): void {
         let source = this.key;
         let name = taskObj.name;
-        taskObj.targets.forEach(subTask => {
-            let fullName: string = name + ":" + subTask;
-            let subTaskName = name.indexOf(' ') === -1 ? `${fullName}` : `"${fullName}"`;
-            let kind: IExtendedTaskDefinition = {
-                type: source,
-                task: fullName
-            };
-            let options: vscode.ShellExecutionOptions = { cwd: this.getRootPath, executable: `${command}`, shellArgs: [`${subTaskName}`, '--no-color'] };
-            let task = new vscode.Task(kind, this.getWorkspaceFolder, fullName, source, new vscode.ShellExecution(`${command} ${subTaskName}`, options));
-            taskArray.push(task);
-            this.setTaskGroup(fullName, task);
-        });
+        if (taskObj.targets.length > 0) {
+            taskObj.targets.forEach(subTask => {
+                let fullName: string = name + ":" + subTask;
+                let subTaskName = name.indexOf(' ') === -1 ? `${fullName}` : `"${fullName}"`;
+                this.pushTask(taskArray, source, fullName, command, subTaskName);
+            });
+        } else {
+            this.pushTask(taskArray, source, name, command, name);
+        }
     }
 
     protected async resolveTasks(): Promise<TaskLoaderResult[]> {
