@@ -1,0 +1,5 @@
+{
+    "task-panel.command.refresh": "Refresh",
+    "task-panel.command.execute": "Execute Task",
+    "task-panel.command.terminate": "Terminate Task"
+}

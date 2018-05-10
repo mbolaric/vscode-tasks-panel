@@ -1,17 +1,17 @@
 'use strict';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
 import { TaskExtension } from './tasks/taskExtension';
 
 let taskExtension: TaskExtension | undefined;
+const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
 export function activate(context: vscode.ExtensionContext) {
-
-    console.log('Congratulations, your extension "task-panel" is now active!');
     try {
         taskExtension = new TaskExtension(context);
         taskExtension.start();
     } catch (error) {
-        vscode.window.showErrorMessage('Cannot activate task-panel Extension!');
+        vscode.window.showErrorMessage(localize('task-panel.extension.cannotActivateExtension', 'Cannot activate task-panel Extension!'));
     }
 }
 

@@ -39,48 +39,48 @@
     "main": "./out/extension",
     "contributes": {
         "views": {
-			"explorer": [
-				{
-					"id": "bitlab-vscode.taskpanel",
+            "explorer": [
+                {
+                    "id": "bitlab-vscode.taskpanel",
                     "name": "Tasks"
-				}
-			]
+                }
+            ]
         },
         "commands": [
             {
                 "command": "bitlab-vscode.taskpanel.refresh",
-                "title": "Refresh",
+                "title": "%task-panel.command.refresh%",
                 "icon": {
-					"light": "resources/icons/light/refresh.svg",
-					"dark": "resources/icons/dark/refresh.svg"
+                    "light": "resources/icons/light/refresh.svg",
+                    "dark": "resources/icons/dark/refresh.svg"
                 },
                 "category": "TaskPanel"
             },
-			{
-				"command": "bitlab-vscode.taskpanel.execute",
-				"title": "Execute Task",
-				"icon": {
-					"light": "resources/icons/light/execute.svg",
-					"dark": "resources/icons/dark/execute.svg"
+            {
+                "command": "bitlab-vscode.taskpanel.execute",
+                "title": "%task-panel.command.execute%",
+                "icon": {
+                    "light": "resources/icons/light/execute.svg",
+                    "dark": "resources/icons/dark/execute.svg"
                 },
                 "category": "TaskPanel"
             },
-			{
-				"command": "bitlab-vscode.taskpanel.terminate",
-				"title": "Terminate Task",
-				"icon": {
-					"light": "resources/icons/light/terminate.svg",
-					"dark": "resources/icons/dark/terminate.svg"
+            {
+                "command": "bitlab-vscode.taskpanel.terminate",
+                "title": "%task-panel.command.terminate%",
+                "icon": {
+                    "light": "resources/icons/light/terminate.svg",
+                    "dark": "resources/icons/dark/terminate.svg"
                 },
                 "category": "TaskPanel"
-			}
+            }
         ],
         "menus": {
-			"view/title": [
-				{
-					"command": "bitlab-vscode.taskpanel.execute",
-					"when": "view == bitlab-vscode.taskpanel",
-					"group": "navigation@1"
+            "view/title": [
+                {
+                    "command": "bitlab-vscode.taskpanel.execute",
+                    "when": "view == bitlab-vscode.taskpanel",
+                    "group": "navigation@1"
                 },
                 {
                     "command": "bitlab-vscode.taskpanel.terminate",
@@ -119,10 +119,12 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.43",
+        "tslint": "^5.8.0",
         "typescript": "^2.6.1",
         "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "vscode-nls": "^3.2.2",
+        "vscode-nls-dev": "^3.0.9"
     }
 }

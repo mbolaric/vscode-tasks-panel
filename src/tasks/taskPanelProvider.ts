@@ -2,6 +2,9 @@
 import { TaskPanelItemBase, TaskPanelRootItem, TaskPanelItem } from './core/taskPanelItem';
 import { TaskLoaderResult } from './core/taskLoader';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
 
 export class TaskPanelProvider implements vscode.TreeDataProvider<TaskPanelItemBase> {
     private _onDidChangeTreeData: vscode.EventEmitter<TaskPanelItemBase | null> = new vscode.EventEmitter<TaskPanelItemBase | null>();
@@ -25,7 +28,7 @@ export class TaskPanelProvider implements vscode.TreeDataProvider<TaskPanelItemB
         }
         if (this._tasks.length === 0) {
             if (this._initialized) {
-                vscode.window.showInformationMessage('Tasks are not found.');
+                vscode.window.showInformationMessage(localize("task-panel.taskpanelprovider.taskNotFound", "Tasks are not found."));
             }
 			return Promise.resolve(list);
         }

@@ -1,7 +1,11 @@
 "use strict";
 import * as path from 'path';
 import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult } from './core/taskLoader';
+import { format } from './core/utils';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
 
 export class GruntTaskLoader extends TaskLoader {
     constructor(workspaceFolder: vscode.WorkspaceFolder) {
@@ -84,11 +88,11 @@ export class GruntTaskLoader extends TaskLoader {
             let supportGruntFilePath =  path.join(__filename, '..', '..', '..', 'resources', 'grunt');
             let commandLoadLine = `${command} --tasks ${supportGruntFilePath} _fetchGruntTasks_`;
             try {
-                this.outputInfo(`Start loading tasks ...`);
+                this.outputInfo(localize("task-panel.taskloader.startLoadingTasks", "Start loading tasks ..."));
                 let { stdout, stderr } = await this.exec(commandLoadLine, { cwd: this.getRootPath });
                 if (stderr) {
                     this.showErrorInChannel(stderr);
-                    this.outputError(`Error loading tasks.`);
+                    this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."));
                 }
                 let result: vscode.Task[] = [];
                 if (stdout) {
@@ -103,14 +107,14 @@ export class GruntTaskLoader extends TaskLoader {
                                 this.extractCoreTask(result, command, item);
                             });                            
                         } else {
-                            this.outputError(`Error loading tasks.`);
+                            this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."));
                         }
                     } catch (error) {
                         this.showErrorInChannel(error);
                     }
                 }
-                this.outputInfo(`Finish loading tasks.`);
-                this.outputInfo(`Loaded ${result.length} tasks.`);
+                this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
+                this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));
                 return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("grunt"))];
             } catch (error) {
                 this.showErrorInChannel(error);

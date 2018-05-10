@@ -5,6 +5,9 @@ import { TaskRunner, TaskState } from './core/taskRuner';
 import { ITaskLoader, TaskLoaderResult } from './core/taskLoader';
 import { output } from './core/utils';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
 
 function resolveTasks(taskLoaders: Map<string, ITaskLoader>, reload: boolean = false): Promise<TaskLoaderResult[]> {
     if (taskLoaders.size === 0) {
@@ -105,7 +108,7 @@ export class TaskManager {
     }
 
     private update(reload: boolean = false): void {
-        output(`[Info] Discovering task file ...`);
+        output(localize("task-panel.taskManager.discoveringTaskFile", "[Info] Discovering task file ..."));
 		if (this._detectors.size > 0) {
 			resolveTasks(this._detectors, reload).then((value: TaskLoaderResult[]) => {
                 this._taskPanelProvider.refresh(value);
@@ -116,7 +119,7 @@ export class TaskManager {
             });
 		}
 		else if (this._detectors.size === 0) {
-            output(`[Info] Task file is not found.`);
+            output(localize("task-panel.taskManager.taskFileNotFound", "[Info] Task file is not found."));
             this._taskPanelProvider.refresh([]);
 		}
     }
@@ -151,13 +154,17 @@ export class TaskManager {
         }
     }
 
+    private showErrorTaskNotSelected() {
+        vscode.window.showErrorMessage(localize("task-panel.taskManager.taskNotSelected", "Task is not selected!"));
+    }
+
     private runSelectedTask(): void {
         if (this._selectedTaskItem) {
             this.selectCurrentTask();
             this._taskRunner.execute(this._selectedTaskItem);
             this._taskPanelProvider.updateState(); 
         } else {
-            vscode.window.showErrorMessage("Task is not selected!");
+            this.showErrorTaskNotSelected();
         }
     }
 
@@ -170,7 +177,7 @@ export class TaskManager {
             this.runSelectedTask();
         } else {
             this._selectedTaskItem = undefined;
-            vscode.window.showErrorMessage("Task is not selected!");
+            this.showErrorTaskNotSelected();
         }
         this._taskPanelProvider.updateState();        
     }
@@ -181,7 +188,7 @@ export class TaskManager {
         } else if (this._selectedTaskItem !== undefined) {
             this._taskRunner.terminateProcess(this._selectedTaskItem);
         } else {
-            vscode.window.showErrorMessage("Task is not selected!");
+            this.showErrorTaskNotSelected();
         }
     }
 

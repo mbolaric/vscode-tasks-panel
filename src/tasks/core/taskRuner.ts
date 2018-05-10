@@ -2,8 +2,11 @@
 import * as cp from 'child_process';
 import * as sd from 'string_decoder';
 import { TaskPanelItem } from './taskPanelItem';
-import { output } from './utils';
+import { output, format } from './utils';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
 
 class Line {
 	private stringDecoder: sd.NodeStringDecoder;
@@ -107,28 +110,28 @@ export class TaskRunner {
                                 childProcess = cp.spawn(this.getWindowsShell(), args, options);
                                 this.handleSpawn(task, childProcess);                
                             } else {
-                                this.outputLog("Task Arguments are not defined!");
+                                this.outputLog(localize("task-panel.taskruner.taskArgumentsAreNotDefined", "Task Arguments are not defined!"));
                             }
                         } else {
                             childProcess = cp.spawn(options.executable, options.shellArgs, defaults);
                             this.handleSpawn(task, childProcess);
                         }
                     } else {
-                        this.outputLog("Executable is not defined!");
+                        this.outputLog(localize("task-panel.taskruner.executableIsNotDefined", "Executable is not defined!"));
                     }
                 }
             } catch (error) {
-                this.outputLog("Task or Task execution is not defined!");
+                this.outputLog(localize("task-panel.taskruner.executeProcessError", "Task or Task execution is not defined!"));
             }
         }
     }
 
     public async execute(task: TaskPanelItem): Promise<void> {
         if (!this._cache[task.id]) {
-            this.outputInfo(`Executing '${task.label}' ...`);
+            this.outputInfo(localize("task-panel.taskruner.taskExecute", format("Executing '{0}' ...", task.label)));
             this.executeProcess(task);
         } else {
-            vscode.window.showInformationMessage(`Task '${task.label}' is already in execution queue.`);
+            vscode.window.showInformationMessage(localize("task-panel.taskruner.taskExistsInRunningQueue", format("Task '{0}' is already in execution queue.", task.label)));
         }
     }
 
@@ -154,7 +157,7 @@ export class TaskRunner {
                 }
             });
             this.clearTask(task);                
-            this.outputInfo(`Executing of '${task.label}' is finish.`);
+            this.outputInfo(localize("task-panel.taskruner.executeFinish", format("Executing of '{0}' is finish.", task.label)));
         });            
         childProcess.stdout.on('data', (data: Buffer) => {
             let lines = stdoutLine.write(data);
@@ -195,7 +198,7 @@ export class TaskRunner {
             }
         }
         this.clearTask(process.task);
-        this.outputInfo(`Executing of '${process.task.label}' is terminated.`);
+        this.outputInfo(localize("task-panel.taskruner.executeTerminated", format("Executing of '{0}' is terminated.", process.task.label)));
         return true;
     }
 
@@ -224,7 +227,7 @@ export class TaskRunner {
             });
             this.terminate(task.id, process, this.getCwdFromTask(task));
         } else {
-            vscode.window.showErrorMessage(`Task '${task.label}' are not running.`);
+            vscode.window.showErrorMessage(localize("task-panel.taskruner.taskIsNotRunning", format("Task '{0}' are not running.", task.label)));
         }
     }
 

@@ -2,7 +2,10 @@
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import { getOrCreateOutputChannel, output, format, IconTheme, getIconPath } from './utils';
+import * as nls from 'vscode-nls';
 import * as vscode from 'vscode';
+
+const localize = nls.loadMessageBundle();
 
 export interface ITaskLoader {
     getTasks(reload: boolean): Promise<TaskLoaderResult[]>;
@@ -79,11 +82,11 @@ export abstract class TaskLoader implements ITaskLoader {
 		const rootPath: string | undefined = this.getRootPath;
 		let emptyTasks: TaskLoaderResult = TaskLoaderResult.empty();
 		if (!rootPath) {
-            this.outputInfo(`The Root path is not set.`);
+            this.outputInfo(localize('task-panel.taskloader.rootPathIsNotSet', 'The Root path is not set.'));
 			return [emptyTasks];
         }
         if (!await this.isTaskFileExists(rootPath)) {
-            this.outputInfo(`The ${this.key} task definition file is not found.`);
+            this.outputInfo(localize('task-panel.taskloader.taskFileIsNotFound', format('The {0} task definition file is not found.', this.key)));
 			return [emptyTasks];
         }
         return this.resolveTasks();

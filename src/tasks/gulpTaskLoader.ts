@@ -1,7 +1,11 @@
 "use strict";
 import * as path from 'path';
 import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult } from './core/taskLoader';
+import { format } from './core/utils';
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
 
 export class GulpTaskLoader extends TaskLoader {
     constructor(workspaceFolder: vscode.WorkspaceFolder) {
@@ -50,11 +54,11 @@ export class GulpTaskLoader extends TaskLoader {
         let command = await this.getCommand(this.getRootPath);
         let loadCommandLine = `${command} --tasks-simple --no-color`;
         try {
-            this.outputInfo(`Start loading tasks ...`);
+            this.outputInfo(localize("task-panel.taskloader.startLoadingTasks", "Start loading tasks ..."));
             let { stdout, stderr } = await this.exec(loadCommandLine, { cwd: this.getRootPath });
             if (stderr && stderr.length > 0) {
                 this.showErrorInChannel(stderr);
-                this.outputError(`Error loading tasks`);
+                this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."));
             }
             let result: vscode.Task[] = [];
             if (stdout) {
@@ -66,8 +70,8 @@ export class GulpTaskLoader extends TaskLoader {
                     this.extractTask(result, command, line);
                 }
             }
-            this.outputInfo(`Finish loading tasks.`);
-            this.outputInfo(`Loaded ${result.length} tasks.`);
+            this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
+            this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));
             return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("gulp"))];
         } catch (error) {
             this.showErrorInChannel(error);
