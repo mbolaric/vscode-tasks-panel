@@ -32,3 +32,7 @@ Tasks Panel support gulp and grunt tasks.
 ### 0.1.5
 
 - Fix: Grunt tasks without multiple targets are now shown in the list.
+
+### 0.1.6
+
+- Fix: Can't execute tasks on Windows.

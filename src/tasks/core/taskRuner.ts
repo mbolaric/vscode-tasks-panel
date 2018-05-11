@@ -98,16 +98,17 @@ export class TaskRunner {
                     };                 
                     if (options.executable) {
                         if (this.isWindows) {
-                            let options: any = defaults;
-                            options.windowsVerbatimArguments = true;
-                            options.detached = false;
+                            let winOptions: any = defaults;
+                            winOptions.windowsVerbatimArguments = true;
+                            winOptions.detached = false;
                             let args: string[] = [
                             	'/s',
-                            	'/c',
+                                '/c',
+                                options.executable
                             ];
                             if (options.shellArgs) {
-                                args.concat(options.shellArgs);
-                                childProcess = cp.spawn(this.getWindowsShell(), args, options);
+                                args = args.concat(options.shellArgs);
+                                childProcess = cp.spawn(this.getWindowsShell(), args, winOptions);
                                 this.handleSpawn(task, childProcess);                
                             } else {
                                 this.outputLog(localize("task-panel.taskruner.taskArgumentsAreNotDefined", "Task Arguments are not defined!"));

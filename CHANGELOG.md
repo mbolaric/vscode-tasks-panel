@@ -15,3 +15,7 @@ All notable changes to the "task-panel" extension will be documented in this fil
 ### [0.1.5] - 2018-10-05
 
 - Fix: Grunt tasks without multiple targets are now shown in the list.
+
+### [0.1.6] - 2018-11-05
+
+- Fix: Can't execute tasks on Windows.
