@@ -19,3 +19,8 @@ All notable changes to the "task-panel" extension will be documented in this fil
 ### [0.1.6] - 2018-11-05
 
 - Fix: Can't execute tasks on Windows.
+
+### [0.1.8] - 2018-11-05
+
+- Fix: Wrong encoding in package.json file.
+- Fix: Missing dependencies.

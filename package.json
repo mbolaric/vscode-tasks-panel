@@ -2,7 +2,7 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "List of tasks",
-    "version": "0.1.6",
+    "version": "0.1.8",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
@@ -117,6 +117,9 @@
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "dependencies": {
+        "vscode-nls": "^3.2.2"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",

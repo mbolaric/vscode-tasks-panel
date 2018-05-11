@@ -1,13 +1,15 @@
 'use strict';
-import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
+const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+
+import * as vscode from 'vscode';
 import { TaskExtension } from './tasks/taskExtension';
 
 let taskExtension: TaskExtension | undefined;
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
 export function activate(context: vscode.ExtensionContext) {
     try {
+        
         taskExtension = new TaskExtension(context);
         taskExtension.start();
     } catch (error) {

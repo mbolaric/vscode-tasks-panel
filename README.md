@@ -35,3 +35,8 @@ Tasks Panel support gulp and grunt tasks.
 ### 0.1.6
 
 - Fix: Can't execute tasks on Windows.
+
+### 0.1.8
+
+- Fix: Wrong encoding in package.json file.
+- Fix: Missing dependencies.
