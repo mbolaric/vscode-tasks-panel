@@ -9,8 +9,7 @@ An extension that provides list of gulp and grunt tasks found in your workspaces
 
 ## Known Issues
 
-- IS NOT PRODUCTION READY!!!.
-- WINDOWS -> NOT TESTED!!!.
+- None.
 
 ## Release Notes
 
