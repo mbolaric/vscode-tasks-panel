@@ -44,11 +44,11 @@ export function output(message: string, type?: string): void {
     if (!_channel) {
         getOrCreateOutputChannel();
     }
-  
+
     if (type) {
-        _channel.appendLine(`[${type}] ${message}`);
+        _channel.appendLine(`TP> [${type}] ${message}`);
     } else {
-        _channel.appendLine(message);
+        _channel.appendLine(`TP> ${message}`);
     }
   
     _channel.show(true);

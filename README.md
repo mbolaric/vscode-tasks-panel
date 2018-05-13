@@ -40,3 +40,7 @@ Tasks Panel support gulp and grunt tasks.
 
 - Fix: Wrong encoding in package.json file.
 - Fix: Missing dependencies.
+
+### 0.1.9
+
+- Added colorized output.

@@ -2,7 +2,7 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "List of tasks",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
@@ -109,7 +109,23 @@
                     "when": "view == bitlab-vscode.taskpanel"
                 }
             ]
-        }
+        },
+        "languages": [
+            {
+                "id": "TasksPanel",
+                "mimetypes": [
+                    "text/x-code-output",
+                    "x-code-output"
+                ]
+            }
+        ],
+        "grammars": [
+            {
+                "language": "TasksPanel",
+                "scopeName": "tasks-panel",
+                "path": "./src/syntaxes/taskpanel.tmLanguage.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

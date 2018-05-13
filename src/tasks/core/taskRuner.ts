@@ -73,12 +73,12 @@ export class TaskRunner {
 
     private outputLog(message: string): void {
         if (message !== "") {
-            output('> ' + message);
+            output(message);
         }
     }
 
     private outputInfo(message: string): void {
-        output('> ' + message);
+        output(message);
     }
 
     private getWindowsShell(): string {

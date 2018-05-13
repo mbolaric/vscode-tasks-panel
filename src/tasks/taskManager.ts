@@ -108,7 +108,7 @@ export class TaskManager {
     }
 
     private update(reload: boolean = false): void {
-        output(localize("task-panel.taskManager.discoveringTaskFile", "[Info] Discovering task file ..."));
+        output(localize("task-panel.taskManager.discoveringTaskFile", "Discovering task file ..."));
 		if (this._detectors.size > 0) {
 			resolveTasks(this._detectors, reload).then((value: TaskLoaderResult[]) => {
                 this._taskPanelProvider.refresh(value);
@@ -119,7 +119,7 @@ export class TaskManager {
             });
 		}
 		else if (this._detectors.size === 0) {
-            output(localize("task-panel.taskManager.taskFileNotFound", "[Info] Task file is not found."));
+            output(localize("task-panel.taskManager.taskFileNotFound", "Task file is not found."), "warning");
             this._taskPanelProvider.refresh([]);
 		}
     }

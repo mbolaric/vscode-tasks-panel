@@ -17,8 +17,8 @@
     "task-panel.taskloader.errorLoadingTasks": "Error loading tasks.",
     "task-panel.taskloader.finishLoadingTasks": "Finish loading tasks.",
     "task-panel.taskloader.loadedTasks": "Loaded {0} tasks.",
-    "task-panel.taskManager.discoveringTaskFile": "[Info] Discovering task file ...",
-    "task-panel.taskManager.taskFileNotFound": "[Info] Task file is not found.",
+    "task-panel.taskManager.discoveringTaskFile": "Discovering task file ...",
+    "task-panel.taskManager.taskFileNotFound": "Task file is not found.",
     "task-panel.taskManager.taskNotSelected": "Task is not selected!",
     "task-panel.taskpanelprovider.taskNotFound": "Tasks are not found."
 }

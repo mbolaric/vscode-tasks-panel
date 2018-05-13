@@ -1,0 +1,87 @@
+{
+    "name": "Tasks Panel",
+    "scopeName": "tasks-panel",
+    "patterns": [
+        {
+			"begin": "(?i)[TP>\\s]",
+			"beginCaptures": {
+				"1": {
+					"name": "tp.line"
+				}
+			},
+			"end": "\\n",
+			"patterns": [
+				{
+					"begin": "\\[(?i:(info))",
+					"beginCaptures": {
+						"0": {
+							"name": "info.output.task-panel"
+						}
+					},
+					"end": "\\]",
+					"name": "comment.info.output.task-panel"
+                },
+				{
+					"begin": "\\[(?i:(warning))",
+					"beginCaptures": {
+						"0": {
+							"name": "warning.output.task-panel"
+						}
+					},
+					"end": "\\]",
+					"name": "invalid.deprecated.warning.output.task-panel"
+                },   
+				{
+					"begin": "(?i:(discovering|executing|running|starting|finished|waiting))",
+					"beginCaptures": {
+						"0": {
+							"name": "action.output.task-panel"
+						}
+					},
+					"end": "\\s",
+					"name": "keyword.definition.output.task.panel"
+                },
+				{
+					"begin": "(?i:(exception|error|failure|fail|throw))(\\:|\\s)",
+					"beginCaptures": {
+						"0": {
+							"name": "invalid.output.task-panel"
+						}
+					},
+					"end": "\\n",
+					"name": "invalid.output.task.panel"
+                }, 
+				{
+					"begin": "\\[(?i:(error))",
+					"beginCaptures": {
+						"0": {
+							"name": "invalid.output.task-panel"
+						}
+					},
+					"end": "\\]",
+					"name": "invalid.output.task.panel"
+                },                               
+                {
+                    "match": "\\b\\d+\\.?\\d*?\\b",
+                    "name": "constant.numeric.output.task-panel"
+                },
+                {
+                    "match": "\"(.*?)\"",
+                    "name": "string.quoted.output.task-panel"
+                },
+                {
+                    "match": "'(.*?)'",
+                    "name": "string.quoted.output.task-panel"
+                },
+                {
+                    "match": "\\b(?i:([a-z]|[0-9])+\\:((\\/\\/)|((\\/\\/)?(\\S)))+)",
+                    "name": "storage.url.output.task-panel"
+                },
+                {
+                    "match": ">>\\s",
+                    "name": "comment.info.output.task-panel"
+                }   
+			]
+        }
+    ]
+}

@@ -156,11 +156,11 @@ export abstract class TaskLoader implements ITaskLoader {
     }
 
     protected outputInfo(message: string): void {
-        output(this.format(`[Info ({0}: {1})] {2}`, this.getWorkspaceFolder.name, this._key, message));
+        output(this.format(`[Info] ({0}: {1}) {2}`, this.getWorkspaceFolder.name, this._key, message));
     }
 
     protected outputError(message: string): void {
-        output(this.format(`[Error ({0}: {1})] {2}`, this.getWorkspaceFolder.name, this._key, message));
+        output(this.format(`[Error] ({0}: {1}) {2}`, this.getWorkspaceFolder.name, this._key, message));
     }
 
     protected showErrorInChannel(error: any): void {

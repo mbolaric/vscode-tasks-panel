@@ -24,3 +24,7 @@ All notable changes to the "task-panel" extension will be documented in this fil
 
 - Fix: Wrong encoding in package.json file.
 - Fix: Missing dependencies.
+
+### [0.1.9] - 2018-??-??
+
+- Added colorized output.
