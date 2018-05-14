@@ -143,7 +143,6 @@
         "tslint": "^5.8.0",
         "typescript": "^2.6.1",
         "vscode": "^1.1.6",
-        "vscode-nls": "^3.2.2",
         "vscode-nls-dev": "^3.0.9"
     }
 }
