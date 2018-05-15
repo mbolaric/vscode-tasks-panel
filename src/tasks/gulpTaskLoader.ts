@@ -69,6 +69,7 @@ export class GulpTaskLoader extends TaskLoader {
                     }
                     this.extractTask(result, command, line);
                 }
+                result = this.sortTasksAsc(result);
             }
             this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
             this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));

@@ -100,12 +100,17 @@ export class GruntTaskLoader extends TaskLoader {
                         let lines = stdout.split(/\r{0,1}\n/);
                         if (lines.length > 2 && lines[1].startsWith("{") && lines[1].endsWith("}")) {
                             let tasksDefObj: {aliasTasks: {name: string, info: string}[], coreTasks: {name: string, info: string, multi: boolean, targets: string[]}[]} = JSON.parse(lines[1]);
+                            let aliasTasks: vscode.Task[] = [];
+                            let coreTasks: vscode.Task[] = [];
                             tasksDefObj.aliasTasks.forEach(item => {
-                                this.extractAliasTask(result, command, item);
+                                this.extractAliasTask(aliasTasks, command, item);
                             });
                             tasksDefObj.coreTasks.forEach(item => {
-                                this.extractCoreTask(result, command, item);
-                            });                            
+                                this.extractCoreTask(coreTasks, command, item);
+                            });
+                            aliasTasks = this.sortTasksAsc(aliasTasks);
+                            coreTasks = this.sortTasksAsc(coreTasks);
+                            result = aliasTasks.concat(coreTasks);                            
                         } else {
                             this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."));
                         }

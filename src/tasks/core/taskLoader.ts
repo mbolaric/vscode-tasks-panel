@@ -131,6 +131,12 @@ export abstract class TaskLoader implements ITaskLoader {
 		}
     }
 
+    protected sortTasksAsc(tasks: vscode.Task[]) {
+        return tasks.sort((a: vscode.Task, b: vscode.Task) => {
+            return a.name < b.name ? -1 : 1;
+        });
+    }
+
     protected format(message: string, ...args: any[]): string {        
         return format(message, ...args);
     }
