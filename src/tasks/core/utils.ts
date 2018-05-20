@@ -32,17 +32,24 @@ export function newGuid() {
     return hex.substr(0, 8) + "-" + hex.substr(9, 4) + "-4" + hex.substr(13, 3) + "-" + clockSequenceHi + hex.substr(16, 3) + "-" + hex.substr(19, 12);
 }
 
-let _channel: vscode.OutputChannel;
+let _channel: vscode.OutputChannel | undefined;
+export function resetChannel() {
+    if (_channel) {
+        _channel.dispose();
+        _channel = undefined;
+    }
+}
+
 export function getOrCreateOutputChannel(): vscode.OutputChannel {
 	if (!_channel) {
-		_channel = vscode.window.createOutputChannel('Tasks Panel');
+		return vscode.window.createOutputChannel('Tasks Panel');
 	}
 	return _channel;
 }
 
 export function output(message: string, type?: string): void {
     if (!_channel) {
-        getOrCreateOutputChannel();
+        _channel = getOrCreateOutputChannel();
     }
 
     if (type) {
@@ -74,5 +81,5 @@ export enum IconTheme {
 }
 
 export function getIconPath(theme: IconTheme, iconName: string) {
-    return path.join(__filename, '..', '..', '..', '..', 'resources', 'icons', `${theme}`, `${iconName}.svg`)
+    return path.join(__filename, '..', '..', '..', '..', 'resources', 'icons', `${theme}`, `${iconName}.svg`);
 }
