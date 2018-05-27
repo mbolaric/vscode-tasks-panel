@@ -43,4 +43,5 @@ Tasks Panel support gulp and grunt tasks.
 
 ### 0.1.9
 
-- Added colorized output.
+- Add colorized output.
+- Add sorting tasks in ASC order by name (The grunt tasks are sorted in two parts - core and alias tasks).
