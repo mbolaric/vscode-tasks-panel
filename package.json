@@ -110,6 +110,23 @@
                 }
             ]
         },
+        "configuration": {
+            "id": "vscode-tasks-panel",
+            "type": "object",
+            "title": "Tasks Panel",
+            "properties": {
+                "tasks-panel.treeCollapsibleState": {
+                    "type": "string",
+                    "enum": [
+                        "expanded",
+                        "collapsed"
+                    ],
+                    "default": "expanded",
+                    "scope": "resource",
+                    "description": "%task-panel.config.treeCollapsibleState%"
+                }
+            }
+        },
         "languages": [
             {
                 "id": "TasksPanel",

@@ -35,7 +35,7 @@ export class TaskPanelProvider implements vscode.TreeDataProvider<TaskPanelItemB
         return new Promise(resolve => {
             this._tasks.forEach((resultItem: TaskLoaderResult) => {
                 if (!resultItem.isEmpty()) {
-                    let root = new TaskPanelRootItem(resultItem.workspaceName + ": " + resultItem.loaderKey, resultItem.icons);
+                    let root = new TaskPanelRootItem(resultItem.workspaceName + ": " + resultItem.loaderKey, resultItem.initialTreeCollapsibleState, resultItem.icons);
                     this._rootTreeList.push(root);                
                     resultItem.tasks.forEach((item: vscode.Task) => {
                         root.addChild(new TaskPanelItem(item.name, item));

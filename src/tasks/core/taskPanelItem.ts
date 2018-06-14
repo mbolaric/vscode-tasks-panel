@@ -1,5 +1,6 @@
 "use strict";
 import { newGuid, IconTheme, getIconPath } from './utils';
+import { TreeCollapsibleState } from './taskLoader';
 import * as vscode from 'vscode';
 
 let itemIcons = {
@@ -44,10 +45,12 @@ export abstract class TaskPanelItemBase extends vscode.TreeItem {
 export class TaskPanelRootItem extends TaskPanelItemBase {
     private _children: TaskPanelItemBase[] = [];
 
-    constructor(name: string, icons?: {light: string, dark: string}) {
+    constructor(name: string, initialTreeState: TreeCollapsibleState, icons?: {light: string, dark: string}) {
         super(name, true);
         this.contextValue = "root";
-        this.collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+        this.collapsibleState = initialTreeState === TreeCollapsibleState.Expanded 
+            ? vscode.TreeItemCollapsibleState.Expanded 
+            : vscode.TreeItemCollapsibleState.Collapsed;
         this.iconPath = icons;
     }
 

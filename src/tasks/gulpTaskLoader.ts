@@ -73,7 +73,7 @@ export class GulpTaskLoader extends TaskLoader {
             }
             this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
             this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));
-            return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("gulp"))];
+            return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("gulp"), this.initialTreeCollapsibleState)];
         } catch (error) {
             this.showErrorInChannel(error);
         }

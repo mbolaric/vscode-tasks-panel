@@ -7,6 +7,11 @@ import * as vscode from 'vscode';
 
 const localize = nls.loadMessageBundle();
 
+export enum TreeCollapsibleState {
+    Collapsed = 1,
+    Expanded = 2
+}
+
 export interface ITaskLoader {
     getTasks(reload: boolean): Promise<TaskLoaderResult[]>;
     start(): void;
@@ -23,12 +28,14 @@ export class TaskLoaderResult {
     private _loaderKey: string;
     private _tasks: vscode.Task[];
     private _icons?: {light: string, dark: string};
+    private _treeCollapsibleState: TreeCollapsibleState;
 
-    constructor(workspaceName: string, loaderKey: string, tasks: vscode.Task[], icons?: {light: string, dark: string}) {
+    constructor(workspaceName: string, loaderKey: string, tasks: vscode.Task[], icons?: {light: string, dark: string}, treeCollapsibleState: TreeCollapsibleState = TreeCollapsibleState.Expanded) {
         this._workspaceName = workspaceName;
         this._loaderKey = loaderKey;
         this._tasks = tasks;
         this._icons = icons;
+        this._treeCollapsibleState = treeCollapsibleState;
     }
 
     public static empty(): TaskLoaderResult {
@@ -51,16 +58,23 @@ export class TaskLoaderResult {
         return this._tasks;
     }
 
+    public get initialTreeCollapsibleState(): TreeCollapsibleState {
+        return this._treeCollapsibleState;
+    }
+
     public isEmpty(): boolean {
         return this._workspaceName === "" || this._loaderKey === "";
     }
 }
+
+type TreeCollapsState = 'expanded' | 'collapsed';
 
 export abstract class TaskLoader implements ITaskLoader {
     private _fileWatcher: vscode.FileSystemWatcher | undefined;
     private _promise: Thenable<TaskLoaderResult[]> | undefined;
     private _workspaceFolder: vscode.WorkspaceFolder;
     private _key: string;
+    private _initialTreeState: TreeCollapsibleState;
     
     private BUILD_NAMES: string[] = ['build', 'compile', 'watch'];
     private TEST_NAMES: string[] = ['test'];
@@ -68,6 +82,12 @@ export abstract class TaskLoader implements ITaskLoader {
     constructor(key: string, workspaceFolder: vscode.WorkspaceFolder) {
         this._key = key;
         this._workspaceFolder = workspaceFolder;
+        this._initialTreeState = TreeCollapsibleState.Expanded;
+    }
+
+    private getInitialTreeState(folder: vscode.WorkspaceFolder): TreeCollapsibleState {
+        let treeState =  vscode.workspace.getConfiguration('tasks-panel', folder.uri).get<TreeCollapsState>('treeCollapsibleState');
+        return treeState === undefined ? TreeCollapsibleState.Expanded : treeState === 'collapsed' ?  TreeCollapsibleState.Collapsed : TreeCollapsibleState.Expanded;
     }
 
     private createFileWatcher(): vscode.FileSystemWatcher {
@@ -94,6 +114,7 @@ export abstract class TaskLoader implements ITaskLoader {
 
     public async getTasks(reload: boolean = false): Promise<TaskLoaderResult[]> {
         if (!this._promise || reload) {
+            this._initialTreeState = this.getInitialTreeState(this._workspaceFolder);
 			this._promise = this.resolveTasksInternal();
 		}
 		return this._promise;
@@ -210,6 +231,10 @@ export abstract class TaskLoader implements ITaskLoader {
 
     public get key(): string {
         return this._key;
+    }
+
+    public get initialTreeCollapsibleState(): TreeCollapsibleState {
+        return this._initialTreeState;
     }
 
     protected abstract async isTaskFileExists(rootPath: string): Promise<boolean>;

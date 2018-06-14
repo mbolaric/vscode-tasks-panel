@@ -8,6 +8,7 @@ import * as nls from 'vscode-nls';
 const localize = nls.loadMessageBundle();
 
 export class GruntTaskLoader extends TaskLoader {
+
     constructor(workspaceFolder: vscode.WorkspaceFolder) {
         super("grunt", workspaceFolder);
     }
@@ -120,7 +121,7 @@ export class GruntTaskLoader extends TaskLoader {
                 }
                 this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
                 this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));
-                return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("grunt"))];
+                return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("grunt"), this.initialTreeCollapsibleState)];
             } catch (error) {
                 this.showErrorInChannel(error);
             }
