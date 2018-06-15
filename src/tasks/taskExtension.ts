@@ -5,7 +5,7 @@ import { GulpTaskLoader } from './gulpTaskLoader';
 import { TaskManager } from './taskManager';
 import * as vscode from 'vscode';
 
-class DoubleClick {
+export class DoubleClick {
     private _doubleClickTimeout: number;
     private _clickCount = 0;
     private _currentSelectedId: string | null = null;
