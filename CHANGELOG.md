@@ -1,7 +1,7 @@
 # Change Log
 Tasks Panel support gulp and grunt tasks.
 
-### [0.1.10] - 2018-06-??
+### [0.1.10] - 2018-06-18
 
 - Add execute task with double click.
 - Add configuration for initial state of tasks tree, default value is expanded.
