@@ -2,6 +2,8 @@
 
 An extension that provides list of gulp and grunt tasks found in your workspaces and allow them to be executed.
 
+![usage](images/example.gif)
+
 ## Features
 
 - Show tasks in explorer view.
@@ -10,8 +12,9 @@ An extension that provides list of gulp and grunt tasks found in your workspaces
 ## Configuration Settings
 
 The Tasks Panel extension comes with a useful configuration settings.
+
 | Setting                               | Description                                                | Default Value      |
-|---------------------------------------|------------------------------------------------------------|--------------------|
+| ------------------------------------- | ---------------------------------------------------------- | ------------------ |
 | `tasks-panel.treeCollapsibleState`    | Set initial tree collapsible state after panel show tasks. | `expanded`         |
 
 
