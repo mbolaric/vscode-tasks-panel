@@ -108,6 +108,10 @@ export class TaskPanelItem extends TaskPanelItemBase {
         }
     }
 
+    public get isRunning() {
+        return this._isRunning;
+    }
+
     public get tooltip(): string {
 		return this._task ? `${this._task.source}: ${this._task.name}` : super.tooltip;
     }

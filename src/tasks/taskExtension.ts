@@ -105,7 +105,7 @@ export class TaskExtension {
     }
     
     private restart(taskItem: TaskPanelItem | TaskPanelRootItem): void {
-        console.log(taskItem);
+        this._taskManager.restartTask(taskItem);
     }
 
     private refresh(): void {

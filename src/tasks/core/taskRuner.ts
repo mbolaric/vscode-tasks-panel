@@ -232,6 +232,10 @@ export class TaskRunner {
         }
     }
 
+    public restartProcess(task: TaskPanelItem): void {
+        console.log("Try to restart: " + task.label);
+    }
+
     public reset(): void {
         Object.keys(this._cache).forEach(id => {
             let process = this._cache[id];

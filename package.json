@@ -1,14 +1,14 @@
 {
     "name": "task-panel",
     "displayName": "Tasks Panel",
-    "description": "List of tasks",
+    "description": "Panel with list of gulp/grunt tasks with visualization and execution.",
     "version": "0.1.10",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
     },
     "license": "MIT",
-    "preview": true,
+    "preview": false,
     "galleryBanner": {
         "color": "#2F2F2F",
         "theme": "dark"
@@ -73,6 +73,15 @@
                     "dark": "resources/icons/dark/terminate.svg"
                 },
                 "category": "TaskPanel"
+            },
+            {
+                "command": "bitlab-vscode.taskpanel.restart",
+                "title": "%task-panel.command.restart%",
+                "icon": {
+                    "light": "resources/icons/light/restart.svg",
+                    "dark": "resources/icons/dark/restart.svg"
+                },
+                "category": "TaskPanel"
             }
         ],
         "menus": {
@@ -86,6 +95,11 @@
                     "command": "bitlab-vscode.taskpanel.terminate",
                     "when": "view == bitlab-vscode.taskpanel",
                     "group": "navigation@2"
+                },
+                {
+                    "command": "bitlab-vscode.taskpanel.restart",
+                    "when": "view == bitlab-vscode.taskpanel",
+                    "group": "navigation@3"
                 },
                 {
                     "command": "bitlab-vscode.taskpanel.refresh",
@@ -103,6 +117,11 @@
                     "command": "bitlab-vscode.taskpanel.terminate",
                     "when": "view == bitlab-vscode.taskpanel && viewItem == item",
                     "group": "execute"
+                },
+                {
+                    "command": "bitlab-vscode.taskpanel.restart",
+                    "when": "view == bitlab-vscode.taskpanel && viewItem == item",
+                    "group": "restart"
                 },
                 {
                     "command": "bitlab-vscode.taskpanel.refresh",

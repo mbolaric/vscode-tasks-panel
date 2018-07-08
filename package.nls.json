@@ -2,5 +2,6 @@
     "task-panel.command.refresh": "Refresh",
     "task-panel.command.execute": "Execute Task",
     "task-panel.command.terminate": "Terminate Task",
+    "task-panel.command.restart": "Restart Task",
     "task-panel.config.treeCollapsibleState": "Set initial tree collapsible state after panel show tasks."
 }

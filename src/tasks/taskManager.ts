@@ -158,6 +158,16 @@ export class TaskManager {
         vscode.window.showErrorMessage(localize("task-panel.taskManager.taskNotSelected", "Task is not selected!"));
     }
 
+    private runOnSelectedTask(taskItem: TaskPanelItem | TaskPanelRootItem | undefined, callback: (task: TaskPanelItem) => void) {
+        if (taskItem !== undefined && taskItem instanceof TaskPanelItem) {
+            callback(taskItem);
+        } else if (this._selectedTaskItem !== undefined) {
+            callback(this._selectedTaskItem);
+        } else {
+            this.showErrorTaskNotSelected();
+        }
+    }
+
     private runSelectedTask(): void {
         if (this._selectedTaskItem) {
             this.selectCurrentTask();
@@ -183,13 +193,15 @@ export class TaskManager {
     }
 
     public terminateTask(taskItem: TaskPanelItem | TaskPanelRootItem | undefined): void {
-        if (taskItem !== undefined && taskItem instanceof TaskPanelItem) {
-            this._taskRunner.terminateProcess(taskItem);
-        } else if (this._selectedTaskItem !== undefined) {
-            this._taskRunner.terminateProcess(this._selectedTaskItem);
-        } else {
-            this.showErrorTaskNotSelected();
-        }
+        this.runOnSelectedTask(taskItem, (task: TaskPanelItem) => {
+            this._taskRunner.terminateProcess(task);
+        });
+    }
+
+    public restartTask(taskItem: TaskPanelItem | TaskPanelRootItem | undefined): void {
+        this.runOnSelectedTask(taskItem, (task: TaskPanelItem) => {
+            this._taskRunner.restartProcess(task);
+        });
     }
 
     private deselectCurrentTask(): void {
