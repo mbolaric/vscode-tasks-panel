@@ -1,4 +1,5 @@
 "use strict";
+import * as path from 'path';
 import * as cp from 'child_process';
 import * as sd from 'string_decoder';
 import { TaskPanelItem } from './taskPanelItem';
@@ -62,8 +63,10 @@ export enum TaskState {
     TaskTerminated
 }
 
+type CacheItem = {task: TaskPanelItem, childProcess: cp.ChildProcess, terminated:  false, onTerminateCallback?: Function};
+
 export class TaskRunner {
-    private _cache: { [id: string]: {task: TaskPanelItem, closeEvent: vscode.Disposable | undefined, childProcess: cp.ChildProcess} | undefined } = {};  
+    private _cache: { [id: string]: CacheItem | undefined } = {};  
 	private readonly _onDidTaskStateChanged = new vscode.EventEmitter<{task: TaskPanelItem, state: TaskState} | null>();
 	public readonly onDidTaskStateChanged: vscode.Event<{task: TaskPanelItem, state: TaskState} | null> = this._onDidTaskStateChanged.event;    
     
@@ -136,41 +139,48 @@ export class TaskRunner {
         }
     }
 
-    private addTaskToCache(task: TaskPanelItem, childProcess: cp.ChildProcess) {
-        this._cache[task.id] = {task: task, closeEvent: undefined, childProcess: childProcess};
+    private addTaskToCache(task: TaskPanelItem, childProcess: cp.ChildProcess): CacheItem | undefined {
+        this._cache[task.id] = {task: task, childProcess: childProcess, terminated: false};
         this.fireOnDidTaskStateChanged(task, TaskState.TaskRun);
+        return this._cache[task.id];
     }
 
     private clearTask(task: TaskPanelItem, terminated: boolean = false) {
+        //let tempCache = this._cache[task.id];
+        let state: TaskState = terminated ? TaskState.TaskTerminated : TaskState.TaskStop;
         this._cache[task.id] = undefined;        
         delete this._cache[task.id];
-        this.fireOnDidTaskStateChanged(task, this.terminate ? TaskState.TaskTerminated : TaskState.TaskStop);
+        this.fireOnDidTaskStateChanged(task, state);
     }
 
 	private handleSpawn(task: TaskPanelItem, childProcess: cp.ChildProcess): void {
         let stdoutLine = new Line();
         let stderrLine = new Line();
-        this.addTaskToCache(task, childProcess);
+        let taskCache: CacheItem | undefined = this.addTaskToCache(task, childProcess);
         childProcess.on('close', () => {
+            console.log("close");
             [stdoutLine.end(), stderrLine.end()].forEach((line, index) => {
                 if (line) {
                     this.outputLog(line);
                 }
             });
-            this.clearTask(task);                
+            this.clearTask(task, taskCache ? taskCache.terminated : true);
             this.outputInfo(localize("task-panel.taskruner.executeFinish", format("Executing of '{0}' is finish.", task.label)));
-        });            
+            if (taskCache && taskCache.onTerminateCallback) {
+                taskCache.onTerminateCallback();
+            }
+        });
         childProcess.stdout.on('data', (data: Buffer) => {
             let lines = stdoutLine.write(data);
             lines.forEach(line => this.outputLog(line));
         });
         childProcess.stderr.on('data', (data: Buffer) => {
             let lines = stderrLine.write(data);
-            lines.forEach(line => this.outputLog(line));
+            lines.forEach(line => this.outputLog(line));            
         });
     }
 
-    private terminate(taskId: string, process: {task: TaskPanelItem, closeEvent: vscode.Disposable | undefined, childProcess: cp.ChildProcess}, cwd?: string): boolean {
+    private terminate(taskId: string, process: {task: TaskPanelItem, childProcess: cp.ChildProcess}, cwd?: string): boolean {
         if (this.isWindows) {
             try {
                 let options: any = {
@@ -181,20 +191,28 @@ export class TaskRunner {
                 }
                 cp.execFileSync('taskkill', ['/T', '/F', '/PID', process.childProcess.pid.toString()], options);
             } catch (err) {
-                this.clearTask(process.task);
+                //this.clearTask(process.task);
                 return false;
+            }
+        } else if (this.isLinux || this.isMacintosh) {
+            try {
+                let cmd = path.join(__filename, '..', '..', '..', '..', 'resources', 'terminateProcess.sh');
+                let result = cp.spawnSync(cmd, [process.childProcess.pid.toString()]);
+                if (result.error) {
+                    //this.clearTask(process.task);
+                    return false;
+                }
+            } catch (err) {
+                //this.clearTask(process.task);
+                return false;                    
             }
         } else {
             try {
-                if (process.closeEvent) {
-                    process.closeEvent.dispose();
-                }
-        
                 if (process.childProcess) {
                     process.childProcess.kill('SIGKILL');
                 }
             } catch (error) {
-                this.clearTask(process.task);
+                //this.clearTask(process.task);
                 return false;                    
             }
         }
@@ -220,12 +238,13 @@ export class TaskRunner {
     public terminateProcess(task: TaskPanelItem, callback?: () => void): void {
         const process = this._cache[task.id];
         if (process) {
-            process.childProcess.on('exit', () => {
-                if (callback) {
-                    callback();
-                }
-                this.fireOnDidTaskStateChanged(task, TaskState.TaskTerminated) ;
-            });
+            // process.childProcess.on('close', () => {
+            //     this.fireOnDidTaskStateChanged(task, TaskState.TaskTerminated);
+            //     if (callback) {
+            //         callback();
+            //     }
+            // });
+            process.onTerminateCallback = callback;
             this.terminate(task.id, process, this.getCwdFromTask(task));
         } else {
             vscode.window.showErrorMessage(localize("task-panel.taskruner.taskIsNotRunning", format("Task '{0}' are not running.", task.label)));
@@ -233,7 +252,14 @@ export class TaskRunner {
     }
 
     public restartProcess(task: TaskPanelItem): void {
-        console.log("Try to restart: " + task.label);
+        const process = this._cache[task.id];
+        if (process) {
+            this.terminateProcess(task, () => {
+                this.executeProcess(task);
+            });
+        } else {
+            vscode.window.showErrorMessage(localize("task-panel.taskruner.taskIsNotRunning", format("Task '{0}' are not running.", task.label)));
+        }
     }
 
     public reset(): void {
@@ -247,5 +273,13 @@ export class TaskRunner {
 
     private get isWindows(): boolean {
         return (process.platform === 'win32');
+    }
+
+    private get isLinux(): boolean {
+        return (process.platform === 'linux');
+    }
+
+    private get isMacintosh(): boolean {
+        return (process.platform === 'darwin');
     }
 }
