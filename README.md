@@ -61,3 +61,7 @@ Tasks Panel support gulp and grunt tasks.
 
 - Add execute task with double click.
 - Add configuration for initial state of tasks tree, default value is expanded.
+
+### 0.1.11
+
+- Add Restart function for long running tasks.

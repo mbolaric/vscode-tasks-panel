@@ -2,7 +2,7 @@
     "name": "task-panel",
     "displayName": "Tasks Panel",
     "description": "Panel with list of gulp/grunt tasks with visualization and execution.",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "publisher": "BitLaboratory",
     "author": {
         "name": "Milan Bolarić"
