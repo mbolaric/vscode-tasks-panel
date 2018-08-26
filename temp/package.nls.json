@@ -20,5 +20,6 @@
     "task-panel.taskManager.discoveringTaskFile": "Discovering task file ...",
     "task-panel.taskManager.taskFileNotFound": "Task file is not found.",
     "task-panel.taskManager.taskNotSelected": "Task is not selected!",
-    "task-panel.taskpanelprovider.taskNotFound": "Tasks are not found."
+    "task-panel.taskpanelprovider.taskNotFound": "Tasks are not found.",
+    "task-panel.taskruner.cannotTerminateTask": "Cannot terminate task!"
 }

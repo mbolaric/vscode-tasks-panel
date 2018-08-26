@@ -84,6 +84,10 @@ export class TaskRunner {
         output(message);
     }
 
+    private outputError(message: string): void {
+        output(message, "ERROR");
+    }
+
     private getWindowsShell(): string {
         return process.env['comspec'] || 'cmd.exe';
     }
@@ -146,9 +150,8 @@ export class TaskRunner {
     }
 
     private clearTask(task: TaskPanelItem, terminated: boolean = false) {
-        //let tempCache = this._cache[task.id];
         let state: TaskState = terminated ? TaskState.TaskTerminated : TaskState.TaskStop;
-        this._cache[task.id] = undefined;        
+        this._cache[task.id] = undefined;
         delete this._cache[task.id];
         this.fireOnDidTaskStateChanged(task, state);
     }
@@ -168,6 +171,7 @@ export class TaskRunner {
             this.outputInfo(localize("task-panel.taskruner.executeFinish", format("Executing of '{0}' is finish.", task.label)));
             if (taskCache && taskCache.onTerminateCallback) {
                 taskCache.onTerminateCallback();
+                taskCache.onTerminateCallback = undefined;
             }
         });
         childProcess.stdout.on('data', (data: Buffer) => {
@@ -191,7 +195,7 @@ export class TaskRunner {
                 }
                 cp.execFileSync('taskkill', ['/T', '/F', '/PID', process.childProcess.pid.toString()], options);
             } catch (err) {
-                //this.clearTask(process.task);
+                this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
                 return false;
             }
         } else if (this.isLinux || this.isMacintosh) {
@@ -199,11 +203,11 @@ export class TaskRunner {
                 let cmd = path.join(__filename, '..', '..', '..', '..', 'resources', 'terminateProcess.sh');
                 let result = cp.spawnSync(cmd, [process.childProcess.pid.toString()]);
                 if (result.error) {
-                    //this.clearTask(process.task);
+                    this.outputError(result.error.toString());
                     return false;
                 }
             } catch (err) {
-                //this.clearTask(process.task);
+                this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
                 return false;                    
             }
         } else {
@@ -212,7 +216,7 @@ export class TaskRunner {
                     process.childProcess.kill('SIGKILL');
                 }
             } catch (error) {
-                //this.clearTask(process.task);
+                this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
                 return false;                    
             }
         }
@@ -238,12 +242,6 @@ export class TaskRunner {
     public terminateProcess(task: TaskPanelItem, callback?: () => void): void {
         const process = this._cache[task.id];
         if (process) {
-            // process.childProcess.on('close', () => {
-            //     this.fireOnDidTaskStateChanged(task, TaskState.TaskTerminated);
-            //     if (callback) {
-            //         callback();
-            //     }
-            // });
             process.onTerminateCallback = callback;
             this.terminate(task.id, process, this.getCwdFromTask(task));
         } else {
