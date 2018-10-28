@@ -10,14 +10,14 @@ import * as nls from 'vscode-nls';
 const localize = nls.loadMessageBundle();
 
 class Line {
-	private stringDecoder: sd.NodeStringDecoder;
-    private remaining: string;
+	private _stringDecoder: sd.NodeStringDecoder;
+    private _remaining: string;
     private CarriageReturn: number = 13;
     private LineFeed: number = 10;
 
 	constructor(encoding: string = 'utf8') {
-		this.stringDecoder = new sd.StringDecoder(encoding);
-		this.remaining = "";
+		this._stringDecoder = new sd.StringDecoder(encoding);
+		this._remaining = "";
 	}
 
 	public write(buffer: NodeBuffer): string[] {
@@ -25,7 +25,7 @@ class Line {
 		let start = 0;
 		let ch: number;
 		let idx = start;
-		let value = this.remaining ? this.remaining + this.stringDecoder.write(buffer) : this.stringDecoder.write(buffer);
+		let value = this._remaining ? this._remaining + this._stringDecoder.write(buffer) : this._stringDecoder.write(buffer);
 
 		if (value.length < 1) {
 			return result;
@@ -48,12 +48,12 @@ class Line {
 				idx++;
 			}
 		}
-		this.remaining = start < value.length ? value.substr(start) : "";
+		this._remaining = start < value.length ? value.substr(start) : "";
 		return result;
 	}
 
 	public end(): string {
-		return this.remaining;
+		return this._remaining;
 	}
 }
 
@@ -184,6 +184,12 @@ export class TaskRunner {
         });
     }
 
+    private killChildProcess(process: {task: TaskPanelItem, childProcess: cp.ChildProcess}) {
+        if (process.childProcess) {
+            process.childProcess.kill('SIGKILL');
+        }
+    }
+
     private terminate(taskId: string, process: {task: TaskPanelItem, childProcess: cp.ChildProcess}, cwd?: string): boolean {
         if (this.isWindows) {
             try {
@@ -204,7 +210,12 @@ export class TaskRunner {
                 let result = cp.spawnSync(cmd, [process.childProcess.pid.toString()]);
                 if (result.error) {
                     this.outputError(result.error.toString());
-                    return false;
+                    try {
+                        this.killChildProcess(process);
+                    } catch {
+                        this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
+                        return false;
+                    }
                 }
             } catch (err) {
                 this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
@@ -212,9 +223,7 @@ export class TaskRunner {
             }
         } else {
             try {
-                if (process.childProcess) {
-                    process.childProcess.kill('SIGKILL');
-                }
+                this.killChildProcess(process);
             } catch (error) {
                 this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
                 return false;                    
