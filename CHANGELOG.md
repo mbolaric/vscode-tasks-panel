@@ -1,7 +1,7 @@
 # Change Log
 Tasks Panel support gulp and grunt tasks.
 
-### [0.1.11]
+### [0.1.11] - 2019-03-10
 
 - Add Restart function for long running tasks.
 
