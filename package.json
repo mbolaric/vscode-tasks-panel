@@ -143,6 +143,16 @@
                     "default": "expanded",
                     "scope": "resource",
                     "description": "%task-panel.config.treeCollapsibleState%"
+                },
+                "tasks-panel.searchGulpTasks": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%task-panel.config.searchGulpTasks%"
+                },
+                "tasks-panel.searchGruntTasks": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "%task-panel.config.searchGruntTasks%"
                 }
             }
         },

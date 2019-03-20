@@ -3,5 +3,7 @@
     "task-panel.command.execute": "Execute Task",
     "task-panel.command.terminate": "Terminate Task",
     "task-panel.command.restart": "Restart Task",
-    "task-panel.config.treeCollapsibleState": "Set initial tree collapsible state after panel show tasks."
+    "task-panel.config.treeCollapsibleState": "Set initial tree collapsible state after panel show tasks.",
+    "task-panel.config.searchGulpTasks": "Enable the searching for Gulp tasks.",
+    "task-panel.config.searchGruntTasks": "Enable the searching for Grunt tasks."
 }
