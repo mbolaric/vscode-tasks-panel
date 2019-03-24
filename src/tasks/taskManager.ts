@@ -93,6 +93,22 @@ export class TaskManager {
         this._loaders.set(key, loader);
     }
 
+    private cleanObject() {
+        this.cleanSelection();
+        this._taskRunner.reset();
+        this._taskPanelProvider.clean();
+        this._loaders.clear();
+        this._detectors.forEach((item) => {
+            item.dispose();
+        });
+        this._detectors.clear();
+    }
+
+    public unregisterAllTaskLoader(): void {
+        this.cleanObject();
+        this._loaders.clear();
+    }
+
     private create(ctor: {new(...args: any[]): Function}, ...args: any[]): any {
         let obj = new ctor(...args);
         return obj;
@@ -108,6 +124,10 @@ export class TaskManager {
     }
 
     private update(reload: boolean = false): void {
+        if (this._loaders.size === 0) {
+            output(localize("task-panel.taskExtension.nothingSelectedInConfiguration", "All Task Loaders are in cofiguration disabled!"), "Warning");
+            return;
+        }
         output(localize("task-panel.taskManager.discoveringTaskFile", "Discovering task file ..."));
 		if (this._detectors.size > 0) {
 			resolveTasks(this._detectors, reload).then((value: TaskLoaderResult[]) => {
@@ -140,12 +160,21 @@ export class TaskManager {
 		this.update();
     }
 
+    public reStart(registerTaskLoaders: Function) {
+        let folders = vscode.workspace.workspaceFolders;
+        this.cleanObject();        
+        registerTaskLoaders();
+		if (folders) {
+			this.updateWorkspaceFolders(folders, []);
+		}
+    }
+
     public start(): void {
 		let folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			this.updateWorkspaceFolders(folders, []);
 		}
-		vscode.workspace.onDidChangeWorkspaceFolders((event) => this.updateWorkspaceFolders(event.added, event.removed));
+		this._context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders((event) => this.updateWorkspaceFolders(event.added, event.removed)));
     }
 
     private selectCurrentTask(): void {
@@ -234,9 +263,6 @@ export class TaskManager {
     }
 
     public dispose(): void {
-        this.cleanSelection();
-        this._taskRunner.reset();
-        this._taskPanelProvider.clean();
-        this._detectors.clear();
+        this.cleanObject();
     }
 }

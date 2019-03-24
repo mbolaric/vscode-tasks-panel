@@ -2,15 +2,11 @@
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import { getOrCreateOutputChannel, output, format, IconTheme, getIconPath } from './utils';
+import { TreeCollapsState, TreeCollapsibleState } from './configuration';
 import * as nls from 'vscode-nls';
 import * as vscode from 'vscode';
 
 const localize = nls.loadMessageBundle();
-
-export enum TreeCollapsibleState {
-    Collapsed = 1,
-    Expanded = 2
-}
 
 export interface ITaskLoader {
     getTasks(reload: boolean): Promise<TaskLoaderResult[]>;
@@ -67,8 +63,6 @@ export class TaskLoaderResult {
     }
 }
 
-type TreeCollapsState = 'expanded' | 'collapsed';
-
 export abstract class TaskLoader implements ITaskLoader {
     private _fileWatcher: vscode.FileSystemWatcher | undefined;
     private _promise: Thenable<TaskLoaderResult[]> | undefined;
@@ -86,7 +80,7 @@ export abstract class TaskLoader implements ITaskLoader {
     }
 
     private getInitialTreeState(folder: vscode.WorkspaceFolder): TreeCollapsibleState {
-        let treeState =  vscode.workspace.getConfiguration('tasks-panel', folder.uri).get<TreeCollapsState>('treeCollapsibleState');
+        let treeState =  vscode.workspace.getConfiguration('tasks-panel').get<TreeCollapsState>('treeCollapsibleState');
         return treeState === undefined ? TreeCollapsibleState.Expanded : treeState === 'collapsed' ?  TreeCollapsibleState.Collapsed : TreeCollapsibleState.Expanded;
     }
 

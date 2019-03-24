@@ -132,7 +132,7 @@
         "configuration": {
             "id": "vscode-tasks-panel",
             "type": "object",
-            "title": "Tasks Panel",
+            "title": "Tasks Panel configuration",
             "properties": {
                 "tasks-panel.treeCollapsibleState": {
                     "type": "string",
@@ -141,7 +141,6 @@
                         "collapsed"
                     ],
                     "default": "expanded",
-                    "scope": "resource",
                     "description": "%task-panel.config.treeCollapsibleState%"
                 },
                 "tasks-panel.searchGulpTasks": {

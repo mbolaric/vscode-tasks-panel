@@ -1,6 +1,6 @@
 "use strict";
 import { newGuid, IconTheme, getIconPath } from './utils';
-import { TreeCollapsibleState } from './taskLoader';
+import { TreeCollapsibleState } from './configuration';
 import * as vscode from 'vscode';
 
 let itemIcons = {

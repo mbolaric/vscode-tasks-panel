@@ -8,8 +8,7 @@ import { TaskExtension } from './tasks/taskExtension';
 let taskExtension: TaskExtension | undefined;
 
 export function activate(context: vscode.ExtensionContext) {
-    try {
-        
+    try {        
         taskExtension = new TaskExtension(context);
         taskExtension.start();
     } catch (error) {
