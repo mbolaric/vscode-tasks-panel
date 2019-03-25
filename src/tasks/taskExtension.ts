@@ -75,10 +75,10 @@ export class TaskExtension {
     }
 
     private attachToConfigurationChange() {
-        this._context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((event) => this.onWorkspaceConfigruationChanged(event)));
+        this._context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((event) => this.onWorkspaceConfigurationChanged(event)));
     }
     
-    private onWorkspaceConfigruationChanged(event: vscode.ConfigurationChangeEvent): void {
+    private onWorkspaceConfigurationChanged(event: vscode.ConfigurationChangeEvent): void {
         this._taskPanelConfiguration = this.loadConfiguration();
         if (event.affectsConfiguration('tasks-panel.treeCollapsibleState')) {
             // FIXME: only collapse/expande tasks

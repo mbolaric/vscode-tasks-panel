@@ -62,7 +62,7 @@ class TaskDetector implements ITaskLoader {
 
 export class TaskManager {
     private _detectors: Map<string, ITaskLoader> = new Map();
-    private _loaders: Map<string, Function> = new Map();
+    private _loaders: Map<string, new (...args: any[]) => ITaskLoader> = new Map();
     private _taskRunner: TaskRunner;
     private _taskPanelProvider: TaskPanelProvider;
     private _selectedTaskItem: TaskPanelItem | undefined;
@@ -89,7 +89,7 @@ export class TaskManager {
         this._context.subscriptions.push(vscode.window.registerTreeDataProvider('bitlab-vscode.taskpanel', this._taskPanelProvider));
     }
 
-    public registerTaskLoader(key: string, loader: Function) {
+    public registerTaskLoader(key: string, loader: {new(...args: any[]): ITaskLoader}) {
         this._loaders.set(key, loader);
     }
 
@@ -109,7 +109,7 @@ export class TaskManager {
         this._loaders.clear();
     }
 
-    private create(ctor: {new(...args: any[]): Function}, ...args: any[]): any {
+    private create(ctor: {new(...args: any[]): ITaskLoader}, ...args: any[]): any {
         let obj = new ctor(...args);
         return obj;
     }

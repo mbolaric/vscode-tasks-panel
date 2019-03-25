@@ -1,6 +1,6 @@
 'use strict';
 import * as nls from 'vscode-nls';
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config(process.env.VSCODE_NLS_CONFIG as nls.Options | undefined)();
 
 import * as vscode from 'vscode';
 import { TaskExtension } from './tasks/taskExtension';

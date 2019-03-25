@@ -180,16 +180,16 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
-        "vscode-nls": "^3.2.2"
+        "vscode-nls": "^3.2.5"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/sinon": "^1.16.34",
+        "@types/sinon": "^1.16.36",
         "sinon": "^1.17.2",
-        "tslint": "^5.8.0",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "vscode-nls-dev": "^3.0.9"
+        "tslint": "^5.11.0",
+        "typescript": "^3.3.1",
+        "vscode": "^1.1.22",
+        "vscode-nls-dev": "^3.2.5"
     }
 }
