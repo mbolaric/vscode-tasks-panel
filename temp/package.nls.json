@@ -24,5 +24,6 @@
     "task-panel.taskruner.cannotTerminateTask": "Cannot terminate task!",
     "task-panel.config.searchGulpTasks": "Enable the searching for Gulp tasks.",
     "task-panel.config.searchGruntTasks": "Enable the searching for Grunt tasks.",
-    "task-panel.taskExtension.nothingSelectedInConfiguration": "All Task Loaders are in cofiguration disabled!"
+    "task-panel.taskExtension.nothingSelectedInConfiguration": "All Task Loaders are disabled!",
+    "task-panel.taskManager.cannotResolveTasks": "Tasks cannot be resolved (Reason: {0})!"
 }

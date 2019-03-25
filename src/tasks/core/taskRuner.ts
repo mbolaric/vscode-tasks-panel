@@ -161,7 +161,6 @@ export class TaskRunner {
         let stderrLine = new Line();
         let taskCache: CacheItem | undefined = this.addTaskToCache(task, childProcess);
         childProcess.on('close', () => {
-            console.log("close");
             [stdoutLine.end(), stderrLine.end()].forEach((line, index) => {
                 if (line) {
                     this.outputLog(line);

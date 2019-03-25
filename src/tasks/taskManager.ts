@@ -3,7 +3,7 @@ import { TaskPanelItem, TaskPanelRootItem } from './core/taskPanelItem';
 import { TaskPanelProvider } from './taskPanelProvider';
 import { TaskRunner, TaskState } from './core/taskRuner';
 import { ITaskLoader, TaskLoaderResult } from './core/taskLoader';
-import { output } from './core/utils';
+import { output, format } from './core/utils';
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
 
@@ -125,7 +125,7 @@ export class TaskManager {
 
     private update(reload: boolean = false): void {
         if (this._loaders.size === 0) {
-            output(localize("task-panel.taskExtension.nothingSelectedInConfiguration", "All Task Loaders are in cofiguration disabled!"), "Warning");
+            output(localize("task-panel.taskExtension.nothingSelectedInConfiguration", "All Task Loaders are disabled!"), "Warning");
             return;
         }
         output(localize("task-panel.taskManager.discoveringTaskFile", "Discovering task file ..."));
@@ -135,11 +135,11 @@ export class TaskManager {
             })
             .catch((reason: any) => {
                 this._taskPanelProvider.refresh([]);
-                console.log(reason);
+                output(localize("task-panel.taskManager.cannotResolveTasks", format("Tasks cannot be resolved (Reason: {0})!", reason.toString())), "Error");
             });
 		}
 		else if (this._detectors.size === 0) {
-            output(localize("task-panel.taskManager.taskFileNotFound", "Task file is not found."), "warning");
+            output(localize("task-panel.taskManager.taskFileNotFound", "Task file is not found."), "Warning");
             this._taskPanelProvider.refresh([]);
 		}
     }
@@ -160,20 +160,21 @@ export class TaskManager {
 		this.update();
     }
 
-    public reStart(registerTaskLoaders: Function) {
-        let folders = vscode.workspace.workspaceFolders;
-        this.cleanObject();        
-        registerTaskLoaders();
+    private updateFolders() {
+		let folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			this.updateWorkspaceFolders(folders, []);
 		}
     }
 
+    public reStart(registerTaskLoaders: Function) {
+        this.cleanObject();        
+        registerTaskLoaders();
+		this.updateFolders();
+    }
+
     public start(): void {
-		let folders = vscode.workspace.workspaceFolders;
-		if (folders) {
-			this.updateWorkspaceFolders(folders, []);
-		}
+		this.updateFolders();
 		this._context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders((event) => this.updateWorkspaceFolders(event.added, event.removed)));
     }
 
