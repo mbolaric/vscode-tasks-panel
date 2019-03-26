@@ -80,11 +80,9 @@ export class TaskExtension {
     
     private onWorkspaceConfigurationChanged(event: vscode.ConfigurationChangeEvent): void {
         this._taskPanelConfiguration = this.loadConfiguration();
-        if (event.affectsConfiguration('tasks-panel.treeCollapsibleState')) {
-            // FIXME: only collapse/expande tasks
-        } else if (event.affectsConfiguration('tasks-panel.searchGruntTasks')) {
+        if (event.affectsConfiguration('tasks-panel.searchGruntTasks')) {
             this.reStart();
-        } else {
+        } else if (event.affectsConfiguration('tasks-panel.searchGulpTasks')) {
             this.reStart();
         }
     }
