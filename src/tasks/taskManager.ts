@@ -1,4 +1,5 @@
 "use strict";
+// import { TasksPanelConfiguration } from './core/configuration';
 import { TaskPanelItem, TaskPanelRootItem } from './core/taskPanelItem';
 import { TaskPanelProvider } from './taskPanelProvider';
 import { TaskRunner, TaskState } from './core/taskRuner';
@@ -168,7 +169,7 @@ export class TaskManager {
     }
 
     public reStart(registerTaskLoaders: Function) {
-        this.cleanObject();        
+        this.cleanObject();
         registerTaskLoaders();
 		this.updateFolders();
     }

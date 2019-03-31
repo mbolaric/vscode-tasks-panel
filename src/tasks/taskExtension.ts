@@ -1,5 +1,5 @@
 "use strict";
-import { ITasksPanelConfiguration, TreeCollapsState, TreeCollapsibleState } from './core/configuration';
+import { TasksPanelConfiguration } from './core/configuration';
 import { TaskPanelItem, TaskPanelRootItem } from './core/taskPanelItem';
 import { GruntTaskLoader } from './gruntTaskLoader';
 import { GulpTaskLoader } from './gulpTaskLoader';
@@ -50,48 +50,21 @@ export class DoubleClick {
 export class TaskExtension {
     private _taskManager: TaskManager;
     private _doubleClickChecker: DoubleClick;
-    private _taskPanelConfiguration: ITasksPanelConfiguration;
+    private _taskPanelConfiguration: TasksPanelConfiguration;
     
     constructor(private _context: vscode.ExtensionContext) {
         this._doubleClickChecker = new DoubleClick(500);
         this.registerCommands();
-        this._taskPanelConfiguration = this.loadConfiguration();
-        this.attachToConfigurationChange();
+        this._taskPanelConfiguration = new TasksPanelConfiguration();
         this._taskManager = new TaskManager(this._context);
         this.registerTasks();
     }
 
-    private loadConfiguration(): ITasksPanelConfiguration {
-        let configuration: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('tasks-panel');
-        let treeState =  configuration.get<TreeCollapsState>('treeCollapsibleState');
-        let searchGruntTasks = configuration.get<boolean>('searchGruntTasks');
-        let searchGulpTasks = configuration.get<boolean>('searchGulpTasks');
- 
-        return {
-            treeCollapsibleState: treeState === undefined ? TreeCollapsibleState.Expanded : treeState === 'collapsed' ?  TreeCollapsibleState.Collapsed : TreeCollapsibleState.Expanded,
-            searchGruntTasks: searchGruntTasks === undefined ? true : searchGruntTasks,
-            searchGulpTasks: searchGulpTasks === undefined ? true : searchGulpTasks
-        };
-    }
-
-    private attachToConfigurationChange() {
-        this._context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((event) => this.onWorkspaceConfigurationChanged(event)));
-    }
-    
-    private onWorkspaceConfigurationChanged(event: vscode.ConfigurationChangeEvent): void {
-        this._taskPanelConfiguration = this.loadConfiguration();
-        if (event.affectsConfiguration('tasks-panel.searchGruntTasks')) {
-            this.reStart();
-        } else if (event.affectsConfiguration('tasks-panel.searchGulpTasks')) {
-            this.reStart();
-        }
-    }
-
     private registerTasks(): void {
-        if (this._taskPanelConfiguration.searchGruntTasks) {
+        if (this._taskPanelConfiguration.get(TasksPanelConfiguration.SEARCH_GRUNT_TASKS)) {
             this._taskManager.registerTaskLoader("grunt", GruntTaskLoader);
         }
-        if (this._taskPanelConfiguration.searchGulpTasks) {
+        if (this._taskPanelConfiguration.get(TasksPanelConfiguration.SEARCH_GULP_TASKS)) {
             this._taskManager.registerTaskLoader("gulp", GulpTaskLoader);
         }
     }
@@ -130,11 +103,11 @@ export class TaskExtension {
         this._taskManager.start();
     }
 
-    private reStart(): void {
-        this._taskManager.reStart(() => {
-            this.registerTasks();
-        });
-    }
+    // private reStart(): void {
+    //     this._taskManager.reStart(() => {
+    //         this.registerTasks();
+    //     });
+    // }
 
     private execute(taskItem: TaskPanelItem | TaskPanelRootItem): void {
         this._taskManager.executeTask(taskItem);
@@ -149,12 +122,22 @@ export class TaskExtension {
     }
 
     private refresh(): void {
-       this._taskManager.refresh();
+        if (this._taskPanelConfiguration.isConfigChanged) {
+            this._taskManager.reStart(() => {
+                this.registerTasks();
+            });
+        } else {
+            this._taskManager.refresh();
+        }
     }
 
     public dispose(): void {
        if (this._taskManager) {
            this._taskManager.dispose();
+       }
+
+       if (this._taskPanelConfiguration) {
+            this._taskPanelConfiguration.dispose();
        }
     }
 }
