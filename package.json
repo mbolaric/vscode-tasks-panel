@@ -140,18 +140,48 @@
                         "expanded",
                         "collapsed"
                     ],
+                    "enumDescriptions": [
+                        "%task-panel.config.treeCollapsibleState.expanded%",
+                        "%task-panel.config.treeCollapsibleState.collapsed%"
+                    ],
                     "default": "expanded",
                     "description": "%task-panel.config.treeCollapsibleState%"
                 },
-                "tasks-panel.searchGulpTasks": {
+                "tasks-panel.search.gulpTasks": {
                     "type": "boolean",
                     "default": true,
-                    "description": "%task-panel.config.searchGulpTasks%"
+                    "description": "%task-panel.config.search.gulpTasks%"
                 },
-                "tasks-panel.searchGruntTasks": {
+                "tasks-panel.search.gruntTasks": {
                     "type": "boolean",
                     "default": true,
-                    "description": "%task-panel.config.searchGruntTasks%"
+                    "description": "%task-panel.config.search.gruntTasks%"
+                },
+                "tasks-panel.search.searchCondition": {
+                    "type": "string",
+                    "default": "RootFolder",
+                    "enum": [
+                      "RootFolder",
+                      "SubFolders",
+                      "RootAndSubFolders"
+                    ],
+                    "enumDescriptions": [
+                      "%task-panel.config.search.searchCondition.root%",
+                      "%task-panel.config.search.searchCondition.subFolder%",
+                      "%task-panel.config.search.searchCondition.rootAndSubFolder%"
+                    ],
+                    "description": "%task-panel.config.search.searchCondition%"
+                },
+                "tasks-panel.search.inSubFolders": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "default": null,
+                    "description": "%task-panel.config.search.inSubFolders%"
                 }
             }
         },
