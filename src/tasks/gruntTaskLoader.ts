@@ -1,4 +1,5 @@
 "use strict";
+import { TasksPanelConfiguration } from './core/configuration';
 import * as path from 'path';
 import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult } from './core/taskLoader';
 import { format } from './core/utils';
@@ -9,8 +10,8 @@ const localize = nls.loadMessageBundle();
 
 export class GruntTaskLoader extends TaskLoader {
 
-    constructor(workspaceFolder: vscode.WorkspaceFolder) {
-        super("grunt", workspaceFolder);
+    constructor(workspaceFolder: vscode.WorkspaceFolder, configuration: TasksPanelConfiguration) {
+        super("grunt", workspaceFolder, configuration);
     }
 
     protected getFilePattern(rootPath: string): string {

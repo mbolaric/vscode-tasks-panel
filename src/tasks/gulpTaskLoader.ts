@@ -1,5 +1,6 @@
 "use strict";
 import * as path from 'path';
+import { TasksPanelConfiguration } from './core/configuration';
 import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult } from './core/taskLoader';
 import { format } from './core/utils';
 import * as vscode from 'vscode';
@@ -8,8 +9,8 @@ import * as nls from 'vscode-nls';
 const localize = nls.loadMessageBundle();
 
 export class GulpTaskLoader extends TaskLoader {
-    constructor(workspaceFolder: vscode.WorkspaceFolder) {
-        super("gulp", workspaceFolder);
+    constructor(workspaceFolder: vscode.WorkspaceFolder, configuration: TasksPanelConfiguration) {
+        super("gulp", workspaceFolder, configuration);
     }
 
     protected getFilePattern(rootPath: string): string {

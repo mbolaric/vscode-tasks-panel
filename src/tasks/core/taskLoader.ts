@@ -1,6 +1,7 @@
 "use strict";
 import * as fs from 'fs';
 import * as cp from 'child_process';
+import { TasksPanelConfiguration } from './configuration';
 import { getOrCreateOutputChannel, output, format, IconTheme, getIconPath } from './utils';
 import { TreeCollapsState, TreeCollapsibleState } from './configuration';
 import * as nls from 'vscode-nls';
@@ -73,7 +74,7 @@ export abstract class TaskLoader implements ITaskLoader {
     private BUILD_NAMES: string[] = ['build', 'compile', 'watch'];
     private TEST_NAMES: string[] = ['test'];
     
-    constructor(key: string, workspaceFolder: vscode.WorkspaceFolder) {
+    constructor(key: string, workspaceFolder: vscode.WorkspaceFolder, private _configuration: TasksPanelConfiguration) {
         this._key = key;
         this._workspaceFolder = workspaceFolder;
         this._initialTreeState = TreeCollapsibleState.Expanded;
@@ -229,6 +230,10 @@ export abstract class TaskLoader implements ITaskLoader {
 
     public get initialTreeCollapsibleState(): TreeCollapsibleState {
         return this._initialTreeState;
+    }
+
+    public get configuration(): TasksPanelConfiguration {
+        return this._configuration;
     }
 
     protected abstract async isTaskFileExists(rootPath: string): Promise<boolean>;

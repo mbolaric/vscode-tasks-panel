@@ -1,7 +1,9 @@
 'use strict';
 import * as vscode from 'vscode';
 import * as assert from 'assert';
+import { TasksPanelConfiguration } from '../../../tasks/core/configuration';
 import { TaskLoaderResult, TaskLoader, IExtendedTaskDefinition } from "../../../tasks/core/taskLoader";
+import { TasksPanelConfigurationMock } from "../../mocks/core/configuration.mock";
 
 let folder: vscode.WorkspaceFolder = {
     uri: vscode.Uri.file("TEST_FILE"),
@@ -9,9 +11,11 @@ let folder: vscode.WorkspaceFolder = {
     index: 1
 };
 
+let configuration: TasksPanelConfiguration = new TasksPanelConfigurationMock();
+
 class TaskLoaderMock extends TaskLoader {
-    constructor(private _isTaskFileExists: boolean, folder: vscode.WorkspaceFolder) {
-        super("test", folder);
+    constructor(private _isTaskFileExists: boolean, folder: vscode.WorkspaceFolder, configuration: TasksPanelConfiguration) {
+        super("test", folder, configuration);
     }
 
     protected async isTaskFileExists(rootPath: string): Promise<boolean> {
@@ -40,7 +44,7 @@ suite("TaskLoader Tests", () => {
     suite("when getTask method is called", () => {
         suite("and task definition file exists", () => {
             suiteSetup(() => {
-                sut = new TaskLoaderMock(true, folder);
+                sut = new TaskLoaderMock(true, folder, configuration);
             });
             test("the object is created", () => {
                 assert(sut !== undefined);
@@ -55,7 +59,7 @@ suite("TaskLoader Tests", () => {
         });
         suite("and task definition file not exists", () => {
             suiteSetup(() => {
-                sut = new TaskLoaderMock(false, folder);
+                sut = new TaskLoaderMock(false, folder, configuration);
             });        
             test("the object is created", () => {
                 assert(sut !== undefined);

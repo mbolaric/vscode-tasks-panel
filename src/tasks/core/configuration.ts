@@ -24,7 +24,7 @@ export interface ITasksPanelConfiguration {
     searchSubFolders: Array<String> | null;
 }
 
-type TasksPanelConfigurationTypes = boolean | String[] | TreeCollapsibleState | TaskSearchConditionFlags | String[] | null;
+export type TasksPanelConfigurationTypes = boolean | String[] | TreeCollapsibleState | TaskSearchConditionFlags | String[] | null;
 type TasksPanelConfigurationKeys = keyof ITasksPanelConfiguration;
 
 export class TasksPanelConfiguration implements vscode.Disposable {
@@ -60,7 +60,7 @@ export class TasksPanelConfiguration implements vscode.Disposable {
         }
     }
     
-    public loadConfiguration(): ITasksPanelConfiguration {
+    private loadConfiguration(): ITasksPanelConfiguration {
         let configuration: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('tasks-panel');
         let treeState =  configuration.get<TreeCollapsState>('treeCollapsibleState');
         let searchGruntTasks = configuration.get<boolean>('search.gruntTasks');

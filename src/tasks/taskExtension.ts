@@ -56,7 +56,7 @@ export class TaskExtension {
         this._doubleClickChecker = new DoubleClick(500);
         this.registerCommands();
         this._taskPanelConfiguration = new TasksPanelConfiguration();
-        this._taskManager = new TaskManager(this._context);
+        this._taskManager = new TaskManager(this._context, this._taskPanelConfiguration);
         this.registerTasks();
     }
 
@@ -103,11 +103,11 @@ export class TaskExtension {
         this._taskManager.start();
     }
 
-    // private reStart(): void {
-    //     this._taskManager.reStart(() => {
-    //         this.registerTasks();
-    //     });
-    // }
+    private reStart(): void {
+        this._taskManager.reStart(() => {
+            this.registerTasks();
+        });
+    }
 
     private execute(taskItem: TaskPanelItem | TaskPanelRootItem): void {
         this._taskManager.executeTask(taskItem);
@@ -123,9 +123,7 @@ export class TaskExtension {
 
     private refresh(): void {
         if (this._taskPanelConfiguration.isConfigChanged) {
-            this._taskManager.reStart(() => {
-                this.registerTasks();
-            });
+            this.reStart();
         } else {
             this._taskManager.refresh();
         }

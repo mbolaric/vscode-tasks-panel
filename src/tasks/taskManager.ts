@@ -1,5 +1,5 @@
 "use strict";
-// import { TasksPanelConfiguration } from './core/configuration';
+import { TasksPanelConfiguration } from './core/configuration';
 import { TaskPanelItem, TaskPanelRootItem } from './core/taskPanelItem';
 import { TaskPanelProvider } from './taskPanelProvider';
 import { TaskRunner, TaskState } from './core/taskRuner';
@@ -68,7 +68,7 @@ export class TaskManager {
     private _taskPanelProvider: TaskPanelProvider;
     private _selectedTaskItem: TaskPanelItem | undefined;
 
-    constructor(private _context: vscode.ExtensionContext) {
+    constructor(private _context: vscode.ExtensionContext, private _taskPanelConfiguration: TasksPanelConfiguration) {
         this._taskPanelProvider = new TaskPanelProvider();
         this._taskRunner = new TaskRunner();
         this.registerTaskRunnerEvents();
@@ -118,7 +118,7 @@ export class TaskManager {
     private createTaskLoaders(workspaceFolder: vscode.WorkspaceFolder): Map<string, ITaskLoader> {
         let loaders: Map<string, ITaskLoader> = new Map<string, ITaskLoader>();
         for(let forCreate of this._loaders.values()) {
-            let instance = this.create.apply(null, [forCreate, workspaceFolder]);
+            let instance = this.create.apply(null, [forCreate, workspaceFolder, this._taskPanelConfiguration]);
             loaders.set(instance.key, instance);
         }
         return loaders;
