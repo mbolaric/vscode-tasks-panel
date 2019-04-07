@@ -1,7 +1,7 @@
 "use strict";
 import * as path from 'path';
 import { TasksPanelConfiguration } from './core/configuration';
-import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult } from './core/taskLoader';
+import { TaskLoader, IExtendedTaskDefinition, TaskLoaderResult, ITaskFolderInfo } from './core/taskLoader';
 import { format } from './core/utils';
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
@@ -24,13 +24,26 @@ export class GulpTaskLoader extends TaskLoader {
         return true;
     }
 
-    protected async getCommand(rootPath: string | undefined): Promise<string | undefined> {
-		let command: string;
-		let platform = process.platform;
-		if (platform === 'win32' && await this.exists(path.join(rootPath!, 'node_modules', '.bin', 'gulp.cmd'))) {
-			command = path.join('.', 'node_modules', '.bin', 'gulp.cmd');
-		} else if ((platform === 'linux' || platform === 'darwin') && await this.exists(path.join(rootPath!, 'node_modules', '.bin', 'gulp'))) {
-			command = path.join('.', 'node_modules', '.bin', 'gulp');
+    protected async getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined> {
+		let command: string = 'gulp';
+        let platform = process.platform;
+        
+        if (!rootPath) {
+            return command;
+        }
+
+		if (platform === 'win32') {
+            if (await this.exists(path.join(folderPath, 'node_modules', '.bin', 'gulp.cmd'))) {
+                command = path.join(folderPath, 'node_modules', '.bin', 'gulp.cmd');
+            } else if (await this.exists(path.join(rootPath!, 'node_modules', '.bin', 'gulp.cmd'))) {
+                command = path.join(rootPath!, 'node_modules', '.bin', 'gulp.cmd');
+            }
+		} else if ((platform === 'linux' || platform === 'darwin')) {
+            if (await this.exists(path.join(folderPath, 'node_modules', '.bin', 'gulp'))) {
+                command = path.join(folderPath, 'node_modules', '.bin', 'gulp');
+            } else if (await this.exists(path.join(rootPath!, 'node_modules', '.bin', 'gulp'))) {
+                command = path.join(rootPath!, 'node_modules', '.bin', 'gulp');
+            }
 		} else {
 			command = 'gulp';
 		}
@@ -38,28 +51,28 @@ export class GulpTaskLoader extends TaskLoader {
 		return command;
     }
 
-    private extractTask(taskArray: vscode.Task[], command: string | undefined, line: string): void {
+    private extractTask(taskArray: vscode.Task[], command: string | undefined, line: string, cwd: string): void {
         let source = 'gulp';
         let kind: IExtendedTaskDefinition = {
             type: source,
             task: line
         };
-        let options: vscode.ShellExecutionOptions = { cwd: this.getRootPath, executable: `${command}`, shellArgs: ['--no-color', `${line}`] };
+        let options: vscode.ShellExecutionOptions = { cwd: cwd, executable: `${command}`, shellArgs: ['--no-color', `${line}`] };
         let task = new vscode.Task(kind, this.getWorkspaceFolder, line, source, new vscode.ShellExecution(`${command} ${line}`, options));
         taskArray.push(task);
         this.setTaskGroup(line, task);
     }
 
-    protected async resolveTasks(): Promise<TaskLoaderResult[]> {
-        let empty: TaskLoaderResult = TaskLoaderResult.empty();
-        let command = await this.getCommand(this.getRootPath);
+    protected async resolveByPath(taskFolderInfo: ITaskFolderInfo): Promise<TaskLoaderResult | undefined> {
+        let command = await this.getCommand(this.getRootPath, taskFolderInfo.folderPath);
         let loadCommandLine = `${command} --tasks-simple --no-color`;
+        let taskResultWorkspace: string = taskFolderInfo.displayName;
         try {
-            this.outputInfo(localize("task-panel.taskloader.startLoadingTasks", "Start loading tasks ..."));
-            let { stdout, stderr } = await this.exec(loadCommandLine, { cwd: this.getRootPath });
+            this.outputInfo(localize("task-panel.taskloader.startLoadingTasks", "Start loading tasks ..."), taskFolderInfo);
+            let { stdout, stderr } = await this.exec(loadCommandLine, { cwd: taskFolderInfo.folderPath });
             if (stderr && stderr.length > 0) {
                 this.showErrorInChannel(stderr);
-                this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."));
+                this.outputError(localize("task-panel.taskloader.errorLoadingTasks", "Error loading tasks."), taskFolderInfo);
             }
             let result: vscode.Task[] = [];
             if (stdout) {
@@ -68,16 +81,16 @@ export class GulpTaskLoader extends TaskLoader {
                     if (line.length === 0) {
                         continue;
                     }
-                    this.extractTask(result, command, line);
+                    this.extractTask(result, command, line, taskFolderInfo.folderPath);
                 }
                 result = this.sortTasksAsc(result);
             }
-            this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."));
-            this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)));
-            return [new TaskLoaderResult(this.getWorkspaceFolder.name, this.key, result, this.getTaskIcons("gulp"), this.initialTreeCollapsibleState)];
+            this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."), taskFolderInfo);
+            this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)), taskFolderInfo);
+            return new TaskLoaderResult(taskResultWorkspace, this.key, result, this.getTaskIcons("gulp"), this.initialTreeCollapsibleState);
         } catch (error) {
             this.showErrorInChannel(error);
         }
-        return [empty];
+        return undefined;
     }
 }

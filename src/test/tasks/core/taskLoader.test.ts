@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as assert from 'assert';
 import { TasksPanelConfiguration } from '../../../tasks/core/configuration';
-import { TaskLoaderResult, TaskLoader, IExtendedTaskDefinition } from "../../../tasks/core/taskLoader";
+import { TaskLoaderResult, TaskLoader, IExtendedTaskDefinition, ITaskFolderInfo } from "../../../tasks/core/taskLoader";
 import { TasksPanelConfigurationMock } from "../../mocks/core/configuration.mock";
 
 let folder: vscode.WorkspaceFolder = {
@@ -30,12 +30,12 @@ class TaskLoaderMock extends TaskLoader {
         return "CMD";
     }
 
-    protected async resolveTasks(): Promise<TaskLoaderResult[]> {
+    protected async resolveByPath(taskFolderInfo: ITaskFolderInfo): Promise<TaskLoaderResult | undefined> {
         let def: IExtendedTaskDefinition = {
             type: "source",
             task: "line"
         };
-        return [new TaskLoaderResult("WORKSPACE", "KEY", [new vscode.Task(def, "NAME", "SOURCE", undefined)])];
+        return new TaskLoaderResult("WORKSPACE", "KEY", [new vscode.Task(def, "NAME", "SOURCE", undefined)]);
     }
 }
 
