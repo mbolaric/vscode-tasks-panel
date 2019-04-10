@@ -1,6 +1,12 @@
 # Change Log
 Tasks Panel support gulp and grunt tasks.
 
+### [0.2.0] - 
+
+- Add settings options:
+    - Disable/enable gulp and grunt task loading.
+    - A possibility to search for tasks in workspace sub folders.
+
 ### [0.1.11] - 2019-03-10
 
 - Add Restart function for long running tasks.

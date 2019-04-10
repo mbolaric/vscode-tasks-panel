@@ -13,9 +13,13 @@ An extension that provides list of gulp and grunt tasks found in your workspaces
 
 The Tasks Panel extension comes with a useful configuration settings.
 
-| Setting                               | Description                                                | Default Value      |
-| ------------------------------------- | ---------------------------------------------------------- | ------------------ |
-| `tasks-panel.treeCollapsibleState`    | Set initial tree collapsible state after panel show tasks. | `expanded`         |
+| Setting                               | Description                                                                    | Default Value      |
+| ------------------------------------- | ------------------------------------------------------------------------------ | ------------------ |
+| `tasks-panel.treeCollapsibleState`    | Set initial tree collapsible state after panel show tasks.                     | `expanded`         |
+| `tasks-panel.search.gruntTasks`       | Enable/Disable the searching for Grunt tasks.                                  | `true`             |
+| `tasks-panel.search.gulpTasks`        | Enable/Disable the searching for Gulp tasks.                                   | `true`             |
+| `tasks-panel.search.searchCondition`  | A value specifying where extension search for task files.                      | `RootFolder`       |
+| `tasks-panel.search.inSubFolders`     | A value specifying sub folders where extension search for task files.          | `null`             |
 
 
 ## Known Issues
@@ -65,3 +69,9 @@ Tasks Panel support gulp and grunt tasks.
 ### 0.1.11
 
 - Add Restart function for long running tasks.
+
+### 0.2.0
+
+- Add settings options:
+    - Disable/enable gulp and grunt task loading.
+    - A possibility to search for tasks in workspace sub folders.

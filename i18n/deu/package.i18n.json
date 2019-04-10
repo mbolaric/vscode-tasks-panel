@@ -8,9 +8,9 @@
     "task-panel.config.treeCollapsibleState.collapsed": "The Tasks tree is shown collapsed.",
     "task-panel.config.search.gulpTasks": "Enable the searching for Gulp tasks.",
     "task-panel.config.search.gruntTasks": "Enable the searching for Grunt tasks.",
-    "task-panel.config.search.searchCondition": "A value specifying where extension search for task files. Extension use first file that match.",
+    "task-panel.config.search.searchCondition": "A value specifying where extension search for task files.",
     "task-panel.config.search.searchCondition.root": "Searching for task file only in project root folder.",
     "task-panel.config.search.searchCondition.subFolder": "Searching for task file only in project sub folder defined in configuration section 'In Sub Folders'.",
     "task-panel.config.search.searchCondition.rootAndSubFolder": "Searching for task file in project root folder and defined sub folders.",
-    "task-panel.config.search.inSubFolders": "A value specifying sub folders where extension search for task files. Extension use first file that match."
+    "task-panel.config.search.inSubFolders": "A value specifying sub folders where extension search for task files."
 }
