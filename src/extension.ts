@@ -23,6 +23,3 @@ export function deactivate() {
         taskExtension = undefined;
     }
 }
-
-
-// "when": "config.bitlab.task-panel.showPanel == true"
