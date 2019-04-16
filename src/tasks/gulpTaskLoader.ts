@@ -14,14 +14,17 @@ export class GulpTaskLoader extends TaskLoader {
     }
 
     protected getFilePattern(rootPath: string): string {
-        return path.join(rootPath, 'gulpfile{.babel.js,.js,.ts}');
+        return path.join(rootPath, '[Gg]ulpfile{.babel.js,.js,.ts}');
     }
 
     protected async isTaskFileExists(rootPath: string): Promise<boolean> {
-		if (!await this.exists(path.join(rootPath, 'gulpfile.js')) && !await this.exists(path.join(rootPath, 'gulpfile.babel.js'))) {
-    		return false;
+        if (await this.exists(path.join(rootPath, 'gulpfile.js')) || 
+            await this.exists(path.join(rootPath, 'gulpfile.babel.js')) ||
+            await this.exists(path.join(rootPath, 'Gulpfile.js')) ||
+            await this.exists(path.join(rootPath, 'Gulpfile.babel.js'))) {
+    		return true;
 		}
-        return true;
+        return false;
     }
 
     protected async getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined> {
