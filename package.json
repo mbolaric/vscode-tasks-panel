@@ -126,6 +126,11 @@
                 {
                     "command": "bitlab-vscode.taskpanel.refresh",
                     "when": "view == bitlab-vscode.taskpanel"
+                },
+                {
+                    "command": "bitlab-vscode.taskpanel.execute",
+                    "when": "view == bitlab-vscode.taskpanel && viewItem == item",
+                    "group": "inline"
                 }
             ]
         },
