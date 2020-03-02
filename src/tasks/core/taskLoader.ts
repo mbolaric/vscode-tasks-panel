@@ -113,7 +113,7 @@ export abstract class TaskLoader implements ITaskLoader {
                 foundWithFiles.push(allTaskFolderInfos[index]);
             }
         }
-        return foundWithFiles;
+        return Promise.resolve(foundWithFiles);
     }
 
     private async resolveTasks(foundTaskInfos: ITaskFolderInfo[]): Promise<TaskLoaderResult[]> {
@@ -129,7 +129,7 @@ export abstract class TaskLoader implements ITaskLoader {
             return results;
         }
         results.push(empty);
-        return results;
+        return Promise.resolve(results);
     }
 
     private async resolveTasksInternal(): Promise<TaskLoaderResult[]> {
@@ -137,12 +137,12 @@ export abstract class TaskLoader implements ITaskLoader {
 		let emptyTasks: TaskLoaderResult = TaskLoaderResult.empty();
 		if (!rootPath) {
             this.outputInfo(localize('task-panel.taskloader.rootPathIsNotSet', 'The Root path is not set.'));
-			return [emptyTasks];
+			return Promise.resolve([emptyTasks]);
         }
         let foundTaskInfoWithFiles: ITaskFolderInfo[] = await this.filterExistingTaskFiles();
         if (foundTaskInfoWithFiles.length === 0) {
             this.outputInfo(localize('task-panel.taskloader.taskFileIsNotFound', format('The {0} task definition file is not found.', this.key)));
-			return [emptyTasks];
+			return Promise.resolve([emptyTasks]);
         }
         return this.resolveTasks(foundTaskInfoWithFiles);
     }

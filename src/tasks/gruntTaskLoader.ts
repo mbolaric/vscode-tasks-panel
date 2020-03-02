@@ -20,9 +20,9 @@ export class GruntTaskLoader extends TaskLoader {
 
     protected async isTaskFileExists(rootPath: string): Promise<boolean> {
 		if (!await this.exists(path.join(rootPath, 'gruntfile.js')) && !await this.exists(path.join(rootPath, 'Gruntfile.js'))) {
-			return false;
+			return Promise.resolve(false);
         }
-        return true;
+        return Promise.resolve(true);
     }
 
     protected async getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined> {
@@ -48,7 +48,7 @@ export class GruntTaskLoader extends TaskLoader {
 			command = 'grunt';
 		}
 
-		return command;
+		return Promise.resolve(command);
     }
 
     private extractAliasTask(taskArray: vscode.Task[], command: string | undefined, taskObj: {name: string, info: string}, cwd: string): void {
@@ -66,7 +66,7 @@ export class GruntTaskLoader extends TaskLoader {
         this.setTaskGroup(name, task);
     }
 
-    private pushTask(taskArray: vscode.Task[], source: string, fullName: string, command: string | undefined, subTaskName: string, cwd: string) {
+    private pushTask(taskArray: vscode.Task[], source: string, fullName: string, command: string | undefined, subTaskName: string, cwd: string): void {
         let kind: IExtendedTaskDefinition = {
             type: source,
             task: fullName
@@ -130,10 +130,10 @@ export class GruntTaskLoader extends TaskLoader {
             }
             this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."), taskFolderInfo);
             this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)), taskFolderInfo);
-            return new TaskLoaderResult(taskResultWorkspace, this.key, result, this.getTaskIcons("grunt"), this.initialTreeCollapsibleState);
+            return Promise.resolve(new TaskLoaderResult(taskResultWorkspace, this.key, result, this.getTaskIcons("grunt"), this.initialTreeCollapsibleState));
         } catch (error) {
             this.showErrorInChannel(error);
         }
-        return undefined;
+        return Promise.resolve(undefined);
     }
 }

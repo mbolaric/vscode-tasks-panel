@@ -22,9 +22,9 @@ export class GulpTaskLoader extends TaskLoader {
             await this.exists(path.join(rootPath, 'gulpfile.babel.js')) ||
             await this.exists(path.join(rootPath, 'Gulpfile.js')) ||
             await this.exists(path.join(rootPath, 'Gulpfile.babel.js'))) {
-    		return true;
+    		return Promise.resolve(true);
 		}
-        return false;
+        return Promise.resolve(false);
     }
 
     protected async getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined> {
@@ -51,7 +51,7 @@ export class GulpTaskLoader extends TaskLoader {
 			command = 'gulp';
 		}
 
-		return command;
+		return Promise.resolve(command);
     }
 
     private extractTask(taskArray: vscode.Task[], command: string | undefined, line: string, cwd: string): void {
@@ -90,10 +90,10 @@ export class GulpTaskLoader extends TaskLoader {
             }
             this.outputInfo(localize("task-panel.taskloader.finishLoadingTasks", "Finish loading tasks."), taskFolderInfo);
             this.outputInfo(localize("task-panel.taskloader.loadedTasks", format("Loaded {0} tasks.", result.length)), taskFolderInfo);
-            return new TaskLoaderResult(taskResultWorkspace, this.key, result, this.getTaskIcons("gulp"), this.initialTreeCollapsibleState);
+            return Promise.resolve(new TaskLoaderResult(taskResultWorkspace, this.key, result, this.getTaskIcons("gulp"), this.initialTreeCollapsibleState));
         } catch (error) {
             this.showErrorInChannel(error);
         }
-        return undefined;
+        return Promise.resolve(undefined);
     }
 }
