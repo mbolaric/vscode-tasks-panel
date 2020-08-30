@@ -1,7 +1,7 @@
 # Change Log
 Tasks Panel support gulp and grunt tasks.
 
-### [0.2.0] - 
+### [0.2.0] - 2020-08-30
 
 - Add settings options:
     - Disable/enable gulp and grunt task loading.
