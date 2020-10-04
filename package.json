@@ -38,6 +38,12 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "viewsWelcome": [
+            {
+              "view": "bitlab-vscode.taskpanel",
+              "contents": "Grunt/gulp tasks are not yet loaded or cann't be found any task in your workspace.\n[Refresh](command:bitlab-vscode.taskpanel.refresh)"
+            }
+        ],
         "views": {
             "explorer": [
                 {
