@@ -87,7 +87,7 @@ export class TaskExtension {
             this.restart(taskItem);
         }));
         this.addForDispose(vscode.commands.registerCommand('bitlab-vscode.taskpanel.onNodeSelect', (taskItem: TaskPanelItem | TaskPanelRootItem) => {
-            if (this._doubleClickChecker.isDoubleClick(taskItem.id)) {
+            if (this._doubleClickChecker.isDoubleClick(taskItem.id!)) {
                 this.execute(taskItem);
             } else {
                 this.onNodeSelect(taskItem);

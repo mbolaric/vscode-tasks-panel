@@ -47,20 +47,20 @@ export class TaskPanelProvider implements vscode.TreeDataProvider<TaskPanelItemB
     }
 
     public updateState(): void {
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(null);
     }
 
     public clean() {
         this._rootTreeList = [];
         this._tasks = [];
         this._initialized = false;
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(null);
     }
 
     public refresh(tasks: TaskLoaderResult[]): void {
         this._rootTreeList = [];
         this._tasks = tasks;
         this._initialized = true;
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(null);
     }
 }

@@ -10,17 +10,17 @@ import * as nls from 'vscode-nls';
 const localize = nls.loadMessageBundle();
 
 class Line {
-	private _stringDecoder: sd.NodeStringDecoder;
+	private _stringDecoder: sd.StringDecoder;
     private _remaining: string;
     private CarriageReturn: number = 13;
     private LineFeed: number = 10;
 
-	constructor(encoding: string = 'utf8') {
+	constructor(encoding: BufferEncoding = 'utf8') {
 		this._stringDecoder = new sd.StringDecoder(encoding);
 		this._remaining = "";
 	}
 
-	public write(buffer: NodeBuffer): string[] {
+	public write(buffer: Buffer): string[] {
 		let result: string[] = [];
 		let start = 0;
 		let ch: number;
@@ -135,7 +135,7 @@ export class TaskRunner {
     }
 
     public async execute(task: TaskPanelItem): Promise<void> {
-        if (!this._cache[task.id]) {
+        if (!this._cache[task.id!]) {
             this.outputInfo(localize("task-panel.taskruner.taskExecute", format("Executing '{0}' ...", task.label)));
             this.executeProcess(task);
         } else {
@@ -144,15 +144,15 @@ export class TaskRunner {
     }
 
     private addTaskToCache(task: TaskPanelItem, childProcess: cp.ChildProcess): CacheItem | undefined {
-        this._cache[task.id] = {task: task, childProcess: childProcess, terminated: false};
+        this._cache[task.id!] = {task: task, childProcess: childProcess, terminated: false};
         this.fireOnDidTaskStateChanged(task, TaskState.TaskRun);
-        return this._cache[task.id];
+        return this._cache[task.id!];
     }
 
     private clearTask(task: TaskPanelItem, terminated: boolean = false) {
         let state: TaskState = terminated ? TaskState.TaskTerminated : TaskState.TaskStop;
-        this._cache[task.id] = undefined;
-        delete this._cache[task.id];
+        this._cache[task.id!] = undefined;
+        delete this._cache[task.id!];
         this.fireOnDidTaskStateChanged(task, state);
     }
 
@@ -171,16 +171,20 @@ export class TaskRunner {
             if (taskCache && taskCache.onTerminateCallback) {
                 taskCache.onTerminateCallback();
                 taskCache.onTerminateCallback = undefined;
-            }
+            }        
         });
-        childProcess.stdout.on('data', (data: Buffer) => {
-            let lines = stdoutLine.write(data);
-            lines.forEach(line => this.outputLog(line));
-        });
-        childProcess.stderr.on('data', (data: Buffer) => {
-            let lines = stderrLine.write(data);
-            lines.forEach(line => this.outputLog(line));            
-        });
+        if (childProcess.stdout) {
+            childProcess.stdout.on('data', (data: Buffer) => {
+                let lines = stdoutLine.write(data);
+                lines.forEach(line => this.outputLog(line));
+            });        
+        }
+        if (childProcess.stderr) {
+            childProcess.stderr.on('data', (data: Buffer) => {
+                let lines = stderrLine.write(data);
+                lines.forEach(line => this.outputLog(line));            
+            });
+        }
     }
 
     private killChildProcess(process: {task: TaskPanelItem, childProcess: cp.ChildProcess}) {
@@ -248,17 +252,17 @@ export class TaskRunner {
     }
 
     public terminateProcess(task: TaskPanelItem, callback?: () => void): void {
-        const process = this._cache[task.id];
+        const process = this._cache[task.id!];
         if (process) {
             process.onTerminateCallback = callback;
-            this.terminate(task.id, process, this.getCwdFromTask(task));
+            this.terminate(task.id!, process, this.getCwdFromTask(task));
         } else {
             vscode.window.showErrorMessage(localize("task-panel.taskruner.taskIsNotRunning", format("Task '{0}' are not running.", task.label)));
         }
     }
 
     public restartProcess(task: TaskPanelItem): void {
-        const process = this._cache[task.id];
+        const process = this._cache[task.id!];
         if (process) {
             this.terminateProcess(task, () => {
                 this.executeProcess(task);

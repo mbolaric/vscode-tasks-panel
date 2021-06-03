@@ -20,21 +20,13 @@ let itemIcons = {
 
 export abstract class TaskPanelItemBase extends vscode.TreeItem {
     private _isFolderNode = false;
-    private _id: string;
 
     constructor(name: string, isFolderNode: boolean, command?: vscode.Command) {
         super(name);
         this._isFolderNode = isFolderNode;
         this.command = command;
-        this._id = newGuid();
-    }
-
-    public get id(): string {
-        return this._id;
-    }
-
-    public get tooltip(): string {
-		return this.label ? this.label : "";
+        this.id = newGuid();
+        this.tooltip = this.label ? this.label.toString() : "";
     }
 
     public get isFolderNode() {
@@ -76,6 +68,7 @@ export class TaskPanelItem extends TaskPanelItemBase {
         this._task = task;
         this._defaultIcon = itemIcons.defaultIcon;
         this.iconPath = this._defaultIcon;
+        this.tooltip = this._task ? `${this._task.source}: ${this._task.name}` : super.tooltip;
     }
 
     private static getOnSelectCommand(taskItem: TaskPanelItem): vscode.Command {
@@ -110,10 +103,6 @@ export class TaskPanelItem extends TaskPanelItemBase {
 
     public get isRunning() {
         return this._isRunning;
-    }
-
-    public get tooltip(): string {
-		return this._task ? `${this._task.source}: ${this._task.name}` : super.tooltip;
     }
     
     public get task(): vscode.Task | undefined {

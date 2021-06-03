@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import * as assert from 'assert';
 import * as sinon from 'sinon';
-import * as utils from '../../../tasks/core/utils';
+import * as utils from '../../../../tasks/core/utils';
 
 suite("Utils Tests", function () {
     test("Execute 'newGuid' method", function() {
@@ -30,7 +30,7 @@ suite("Utils Tests", function () {
         suiteSetup(() => {
             utils.resetChannel();
             channelStub = sinon.stub(vscode.window, 'createOutputChannel');
-            out = {appendLine: sinon.spy(), show: sinon.spy()};
+            out = {appendLine: sinon.spy(), show: sinon.spy(), dispose: sinon.spy()};
             channelStub.returns(out);
         });
         teardown(() => {

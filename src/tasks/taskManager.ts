@@ -145,7 +145,7 @@ export class TaskManager {
 		}
     }
 
-    private updateWorkspaceFolders(added: vscode.WorkspaceFolder[], removed: vscode.WorkspaceFolder[]): void {
+    private updateWorkspaceFolders(added: readonly vscode.WorkspaceFolder[], removed: readonly vscode.WorkspaceFolder[]): void {
 		for (let remove of removed) {
 			let detector = this._detectors.get(remove.uri.toString());
 			if (detector) {

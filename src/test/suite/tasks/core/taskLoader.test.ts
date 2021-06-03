@@ -1,8 +1,8 @@
 'use strict';
 import * as vscode from 'vscode';
 import * as assert from 'assert';
-import { TasksPanelConfiguration } from '../../../tasks/core/configuration';
-import { TaskLoaderResult, TaskLoader, IExtendedTaskDefinition, ITaskFolderInfo } from "../../../tasks/core/taskLoader";
+import { TasksPanelConfiguration } from '../../../../tasks/core/configuration';
+import { TaskLoaderResult, TaskLoader, IExtendedTaskDefinition, ITaskFolderInfo } from "../../../../tasks/core/taskLoader";
 import { TasksPanelConfigurationMock } from "../../mocks/core/configuration.mock";
 
 let folder: vscode.WorkspaceFolder = {

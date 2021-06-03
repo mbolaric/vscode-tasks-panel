@@ -1,5 +1,5 @@
 'use strict';
-import { TasksPanelConfiguration, ITasksPanelConfiguration, TasksPanelConfigurationTypes, TaskSearchConditionFlags, TreeCollapsibleState } from '../../../tasks/core/configuration';
+import { TasksPanelConfiguration, ITasksPanelConfiguration, TasksPanelConfigurationTypes, TaskSearchConditionFlags, TreeCollapsibleState } from '../../../../tasks/core/configuration';
 
 export class TasksPanelConfigurationMock extends TasksPanelConfiguration {
     constructor() {

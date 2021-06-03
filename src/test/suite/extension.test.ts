@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as assert from 'assert';
 
 suite("Extension Tests", function () {
+    vscode.window.showInformationMessage('Start all tests.');
     let extension: vscode.Extension<any> | undefined;
     suiteSetup(async function() { 
         extension = vscode.extensions.getExtension("BitLaboratory.task-panel"); 

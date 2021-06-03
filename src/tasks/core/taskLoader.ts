@@ -337,8 +337,8 @@ export abstract class TaskLoader implements ITaskLoader {
         return this._configuration;
     }
 
-    protected abstract async isTaskFileExists(rootPath: string): Promise<boolean>;
+    protected abstract isTaskFileExists(rootPath: string): Promise<boolean>;
     protected abstract getFilePattern(workspacePath: string): string;
-    protected abstract async getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined>;
-    protected abstract async resolveByPath(taskFolderInfo: ITaskFolderInfo): Promise<TaskLoaderResult | undefined>;
+    protected abstract getCommand(rootPath: string | undefined, folderPath: string): Promise<string | undefined>;
+    protected abstract resolveByPath(taskFolderInfo: ITaskFolderInfo): Promise<TaskLoaderResult | undefined>;
 }
