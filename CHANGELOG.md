@@ -1,5 +1,9 @@
 # Change Log
-Tasks Panel support gulp and grunt tasks.
+Tasks Panel support gulp, grunt and NPM tasks.
+
+### 0.3.0
+
+- Add support for NPM tasks defined in package file.
 
 ### [0.2.0] - 2020-08-30
 

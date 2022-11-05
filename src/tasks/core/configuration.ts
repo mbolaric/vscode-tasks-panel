@@ -20,6 +20,7 @@ export interface ITasksPanelConfiguration {
     treeCollapsibleState: TreeCollapsibleState;
     searchGruntTasks: boolean;
     searchGulpTasks: boolean;
+    searchNpmTasks: boolean;
     searchCondition: TaskSearchConditionFlags;
     searchSubFolders: Array<String> | null;
 }
@@ -35,6 +36,7 @@ export class TasksPanelConfiguration implements vscode.Disposable {
     public static TREE_COLLAPSIBLE_STATE: TasksPanelConfigurationKeys = "treeCollapsibleState";
     public static SEARCH_GRUNT_TASKS: TasksPanelConfigurationKeys = "searchGruntTasks";
     public static SEARCH_GULP_TASKS: TasksPanelConfigurationKeys = "searchGulpTasks";
+    public static SEARCH_NPM_TASKS: TasksPanelConfigurationKeys = "searchNpmTasks";
     public static SEARCH_CONDITION: TasksPanelConfigurationKeys = "searchCondition";
     public static SEARCH_SUB_FOLDERS_PATH: TasksPanelConfigurationKeys = "searchSubFolders";
 
@@ -65,6 +67,7 @@ export class TasksPanelConfiguration implements vscode.Disposable {
         let treeState =  configuration.get<TreeCollapsState>('treeCollapsibleState');
         let searchGruntTasks = configuration.get<boolean>('search.gruntTasks');
         let searchGulpTasks = configuration.get<boolean>('search.gulpTasks');
+        let searchNpmTasks = configuration.get<boolean>('search.npmTasks');
         let searchCondition = configuration.get<TaskSearchConditions>('search.searchCondition');
         let inSubFolders = configuration.get<Array<String>>('search.inSubFolders');
  
@@ -72,6 +75,7 @@ export class TasksPanelConfiguration implements vscode.Disposable {
             treeCollapsibleState: treeState === undefined ? TreeCollapsibleState.Expanded : treeState === 'collapsed' ?  TreeCollapsibleState.Collapsed : TreeCollapsibleState.Expanded,
             searchGruntTasks: searchGruntTasks === undefined ? true : searchGruntTasks,
             searchGulpTasks: searchGulpTasks === undefined ? true : searchGulpTasks,
+            searchNpmTasks: searchNpmTasks === undefined ? true : searchNpmTasks,
             searchCondition: this.getSearchConditionFlagsFromConfig(searchCondition),
             searchSubFolders: inSubFolders !== undefined ? inSubFolders : null
         };

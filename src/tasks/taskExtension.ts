@@ -3,6 +3,7 @@ import { TasksPanelConfiguration } from './core/configuration';
 import { TaskPanelItem, TaskPanelRootItem } from './core/taskPanelItem';
 import { GruntTaskLoader } from './gruntTaskLoader';
 import { GulpTaskLoader } from './gulpTaskLoader';
+import { NpmTaskLoader } from './npmTaskLoader';
 import { TaskManager } from './taskManager';
 import * as vscode from 'vscode';
 
@@ -66,6 +67,9 @@ export class TaskExtension {
         }
         if (this._taskPanelConfiguration.get(TasksPanelConfiguration.SEARCH_GULP_TASKS)) {
             this._taskManager.registerTaskLoader("gulp", GulpTaskLoader);
+        }
+        if (this._taskPanelConfiguration.get(TasksPanelConfiguration.SEARCH_NPM_TASKS)) {
+            this._taskManager.registerTaskLoader("npm", NpmTaskLoader);
         }
     }
 

@@ -202,13 +202,24 @@ export class TaskRunner {
                 if (cwd) {
                     options.cwd = cwd;
                 }
-                cp.execFileSync('taskkill', ['/T', '/F', '/PID', process.childProcess.pid.toString()], options);
+                if (process === undefined || process.childProcess === undefined) {
+                    return false;
+                }
+                if (process.childProcess.pid === undefined) {
+                    this.outputError(localize("task-panel.taskruner.cannotTerminateTaskNoPid", "Cannot terminate task. Task PID is undefined!"));
+                    return false;
+                }                
+                cp.execFileSync('taskkill', ['/T', '/F', '/PID', process.childProcess.pid!.toString()], options);
             } catch (err) {
                 this.outputError(localize("task-panel.taskruner.cannotTerminateTask", "Cannot terminate task!"));
                 return false;
             }
         } else if (this.isLinux || this.isMacintosh) {
             try {
+                if (process.childProcess.pid === undefined) {
+                    this.outputError(localize("task-panel.taskruner.cannotTerminateTaskNoPid", "Cannot terminate task. Task PID is undefined!"));
+                    return false;
+                } 
                 let cmd = path.join(__filename, '..', '..', '..', '..', 'resources', 'terminateProcess.sh');
                 let result = cp.spawnSync(cmd, [process.childProcess.pid.toString()]);
                 if (result.error) {

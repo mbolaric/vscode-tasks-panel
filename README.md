@@ -1,6 +1,6 @@
 # task-panel
 
-An extension that provides list of gulp and grunt tasks found in your workspaces and allow them to be executed.
+An extension that provides list of gulp, grunt and npm tasks found in your workspaces and allow them to be executed.
 
 ![usage](images/example.gif)
 
@@ -19,6 +19,7 @@ The following settings can be used to control the extension via **File** > **Pre
 | `tasks-panel.treeCollapsibleState`    | Set initial tree collapsible state after panel show tasks.                     | `expanded`         |
 | `tasks-panel.search.gruntTasks`       | Enable/Disable the searching for Grunt tasks.                                  | `true`             |
 | `tasks-panel.search.gulpTasks`        | Enable/Disable the searching for Gulp tasks.                                   | `true`             |
+| `tasks-panel.search.npmTasks`         | Enable/Disable the searching for NPM tasks.                                    | `false`             |
 | `tasks-panel.search.searchCondition`  | A value specifying where extension search for task files.                      | `RootFolder`       |
 | `tasks-panel.search.inSubFolders`     | A value specifying sub folders where extension search for task files.          | `null`             |
 
@@ -90,3 +91,7 @@ Tasks Panel support gulp and grunt tasks.
 - Add settings options:
     - Disable/enable gulp and grunt task loading.
     - A possibility to search for tasks in workspace sub folders.
+
+### 0.3.0
+
+- Add support for NPM tasks defined in package file.
