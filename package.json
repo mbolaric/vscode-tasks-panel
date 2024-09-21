@@ -224,7 +224,7 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "pretest": "yarn run compile && yarn run lint",
-        "lint": "eslint src --ext ts",
+        "lint": "eslint src",
         "test": "npm run compile && node ./out/test/runTest.js"
     },
     "dependencies": {
@@ -232,18 +232,18 @@
     },
     "devDependencies": {
         "@types/glob": "^8.1.0",
-        "@types/mocha": "^10.0.4",
-        "@types/node": "^20.9.1",
-        "@types/sinon": "^17.0.1",
+        "@types/mocha": "^10.0.8",
+        "@types/node": "^22.5.5",
+        "@types/sinon": "^17.0.3",
         "@types/vscode": "^1.73.0",
-        "@typescript-eslint/eslint-plugin": "^6.11.0",
-        "@typescript-eslint/parser": "^6.11.0",
-        "@vscode/test-electron": "^2.3.6",
-        "eslint": "^8.54.0",
-        "glob": "^10.3.10",
-        "mocha": "^10.2.0",
-        "sinon": "^17.0.1",
-        "typescript": "^5.2.2",
+        "@typescript-eslint/eslint-plugin": "^8.6.0",
+        "@typescript-eslint/parser": "^8.6.0",
+        "@vscode/test-electron": "^2.4.1",
+        "eslint": "^9.11.0",
+        "glob": "^11.0.0",
+        "mocha": "^10.7.3",
+        "sinon": "^19.0.2",
+        "typescript": "^5.6.2",
         "vscode-nls-dev": "^4.0.4"
     }
 }

@@ -14,7 +14,7 @@ function resolveTasks(taskLoaders: Map<string, ITaskLoader>, reload: boolean = f
     if (taskLoaders.size === 0) {
         return Promise.resolve([]);
     } else if (taskLoaders.size === 1) {
-        return Promise.resolve(taskLoaders.values().next().value.getTasks(reload));
+        return Promise.resolve(taskLoaders.values().next()!.value!.getTasks(reload));
     } else {
         let promises: Promise<TaskLoaderResult[]>[] = [];
         for (let loader of taskLoaders.values()) {

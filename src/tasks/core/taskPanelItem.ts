@@ -68,7 +68,9 @@ export class TaskPanelItem extends TaskPanelItemBase {
         this._task = task;
         this._defaultIcon = itemIcons.defaultIcon;
         this.iconPath = this._defaultIcon;
-        this.tooltip = this._task ? `${this._task.source}: ${this._task.name}` : super.tooltip;
+        if (this._task) {
+            this.tooltip = `${this._task.source}: ${this._task.name}`;
+        }       
     }
 
     private static getOnSelectCommand(taskItem: TaskPanelItem): vscode.Command {
